@@ -1,49 +1,32 @@
-﻿using DataLayer.Data;
+﻿
 using DataLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using DataLayer.Models; 
+using Microsoft.EntityFrameworkCore;
+using BusinessLayer.Interfaces;
 
-
-
-
-
-namespace HrSystem.Controllers 
+namespace HrSystem.Controllers
 {
-
-    
-
     public class HolidaysController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly BusinessLayer.Interfaces.IHolidayService _holidayService;
 
-        public HolidaysController(ApplicationDbContext context)
+        public HolidaysController(BusinessLayer.Interfaces.IHolidayService holidayService)
         {
-            _context = context;
+            _holidayService = holidayService;
         }
-
 
         public async Task<IActionResult> Index()
         {
-            var model = await _context.Holidays.ToListAsync();
-            List<string> days = new List<string>();
-            foreach (var holiday in model)
-            {
-                DateTime date = new DateTime(holiday.Date.Year, holiday.Date.Month, holiday.Date.Day);
-                string str = date.DayOfWeek.ToString();
-                days.Add(str);
-            }
-            ViewBag.days = days;
+            var model = await _holidayService.GetAllHolidaysAsync();
+            ViewBag.days = _holidayService.GetHolidayDaysOfWeek(model);
             return View(model);
         }
-
 
         public IActionResult Create()
         {
             return View();
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -51,13 +34,11 @@ namespace HrSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(holiday);
-                await _context.SaveChangesAsync();
+                await _holidayService.AddHolidayAsync(holiday);
                 return RedirectToAction(nameof(Index));
             }
             return View(holiday);
         }
-
 
         public async Task<IActionResult> Edit(int? id)
         {
@@ -66,14 +47,13 @@ namespace HrSystem.Controllers
                 return RedirectToAction("NotFound", "Errors");
             }
 
-            var holiday = await _context.Holidays.FindAsync(id);
+            var holiday = await _holidayService.GetHolidayByIdAsync(id.Value);
             if (holiday == null)
             {
                 return RedirectToAction("NotFound", "Errors");
             }
             return View(holiday);
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -88,12 +68,11 @@ namespace HrSystem.Controllers
             {
                 try
                 {
-                    _context.Update(holiday);
-                    await _context.SaveChangesAsync();
+                    await _holidayService.UpdateHolidayAsync(holiday);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!HolidayExists(holiday.Id))
+                    if (!_holidayService.HolidayExists(holiday.Id))
                     {
                         return NotFound();
                     }
@@ -107,7 +86,6 @@ namespace HrSystem.Controllers
             return View(holiday);
         }
 
-
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -115,19 +93,8 @@ namespace HrSystem.Controllers
                 return NotFound();
             }
 
-            var holiday = await _context.Holidays
-                .FirstOrDefaultAsync(m => m.Id == id);
-            
-            _context.Holidays.Remove(holiday);
-            await _context.SaveChangesAsync();
+            await _holidayService.DeleteHolidayAsync(id.Value);
             return RedirectToAction(nameof(Index));
-        }
-
-
-
-        private bool HolidayExists(int id)
-        {
-            return _context.Holidays.Any(e => e.Id == id);
         }
     }
 }

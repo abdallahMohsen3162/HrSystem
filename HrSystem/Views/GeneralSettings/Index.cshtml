@@ -38,10 +38,11 @@
             <div class="row">
                 @foreach (var day in Enum.GetValues(typeof(Day)).Cast<Day>())
                 {
-                    <div class="form-check">
-                        <input type="checkbox" name="NewGeneralSettings.SelectedDays" value="@day"
-                               class="form-check-input" />
-                        <label class="form-check-label">@day</label>
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input type="checkbox" name="NewGeneralSettings.SelectedDays" value="@day" class="form-check-input" />
+                            <label class="form-check-label">@day</label>
+                        </div>
                     </div>
                 }
             </div>
