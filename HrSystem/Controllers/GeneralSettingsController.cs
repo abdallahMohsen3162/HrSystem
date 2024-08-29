@@ -114,8 +114,11 @@ namespace HrSystem.Controllers
                     return View(model); 
                 }
             }
+            if ()
+            {
 
-            // If the model state is invalid, redisplay the form
+            }
+            
             var settings = await _generalSettingsService.GetSettingsByEmployeeIdAsync(id);
             return View(settings);
         }
