@@ -1,0 +1,112 @@
+﻿@model DataLayer.ViewModels.CreateRoleClaimsViewModel
+
+@{
+    ViewBag.Title = "Create Group";
+}
+
+<h2>Create Role</h2>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-body collapse show">
+
+                    <a asp-action="Index">Show</a>
+                </div>
+                <br />
+                <div class="card-title-wrap bar-success">
+                    <h4 class="card-title">Add New Role</h4>
+                    <form asp-action="CreateRole" method="post">
+                        <div class="row">
+                            <div class="col-lg-2"></div>
+                            <div class="col-sm-12 col-md-9">
+                                <div id="DataTables_Table_0_filter" class="dataTables_filter">
+                                    <label>
+
+                                        Role Name:
+                                        <input type="text" class="form-control form-control-sm" placeholder="Enter Role Name" asp-for="RoleName" required style="height: 58px;">
+                                        
+                                        <strong>
+                                            <span asp-validation-for="RoleName" class="text-danger"></span>
+                                        </strong>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped table-bordered zero-configuration mt-40 table-group">
+                            <thead>
+                                <tr>
+                                    <th>Module Name</th>
+                                    <th>Show</th>
+                                    <th>Add</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Employee</td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.Employee.Show" /></td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.Employee.Add" /></td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.Employee.Edit" /></td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.Employee.Delete" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Group</td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.Group.Show" /></td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.Group.Add" /></td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.Group.Edit" /></td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.Group.Delete" /></td>
+                                </tr>
+
+
+                                <tr>
+                                    <td>Permissions</td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.Permissions.Show" /></td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.Permissions.Add" /></td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.Permissions.Edit" /></td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.Permissions.Delete" /></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Salary</td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.Salary.Show" /></td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.Salary.Add" /></td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.Salary.Edit" /></td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.Salary.Delete" /></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Attendance</td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.Attendance.Show" /></td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.Attendance.Add" /></td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.Attendance.Edit" /></td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.Attendance.Delete" /></td>
+                                </tr>
+
+                                <tr>
+                                    <td>General Settings</td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.GeneralSettings.Show" /></td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.GeneralSettings.Add" /></td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.GeneralSettings.Edit" /></td>
+                                    <td><input type="checkbox" name="Claims" value="@DataLayer.Entities.AuthConstants.GeneralSettings.Delete" /></td>
+                                </tr>
+
+
+
+
+                            </tbody>
+                        </table>
+                        <button type="submit" class="btn btn-primary">Create Role</button>
+                    </form>
+                </div>
+            </div>
+            
+
+
+
+        </div>
+    </div>
+</div>

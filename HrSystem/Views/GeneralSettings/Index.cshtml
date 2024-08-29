@@ -1,0 +1,104 @@
+﻿@model DataLayer.ViewModels.GeneralSettingsIndexViewModel
+
+@{
+    ViewData["Title"] = "Employee General Settings";
+}
+
+
+
+@if(Model.EmployeesWithoutSettings.Count > 0)
+{
+    <h3>Add General Settings for Existing Employee</h3>
+    <form asp-action="CreateGeneralSettings" method="post">
+        <div class="form-group">
+            <label asp-for="@Model.NewGeneralSettings.EmployeeId">Select Employee</label>
+            <select asp-for="@Model.NewGeneralSettings.EmployeeId" class="form-control">
+                @foreach (var item in Model.EmployeesWithoutSettings)
+                {
+                    <option value="@item.Id">@item.EmployeeName</option>
+                }
+            </select>
+            <span asp-validation-for="@Model.NewGeneralSettings.EmployeeId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="NewGeneralSettings.BonusPerHour">Bonus Per Hour</label>
+            <input asp-for="NewGeneralSettings.BonusPerHour" class="form-control" />
+            <span asp-validation-for="NewGeneralSettings.BonusPerHour" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="NewGeneralSettings.RivalPerHour">Rival Per Hour</label>
+            <input asp-for="NewGeneralSettings.RivalPerHour" class="form-control" />
+            <span asp-validation-for="NewGeneralSettings.RivalPerHour" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Weekly Holidays</label>
+            <div class="row">
+                @foreach (var day in Enum.GetValues(typeof(Day)).Cast<Day>())
+                {
+                    <div class="form-check">
+                        <input type="checkbox" name="NewGeneralSettings.SelectedDays" value="@day"
+                               class="form-check-input" />
+                        <label class="form-check-label">@day</label>
+                    </div>
+                }
+            </div>
+            <span asp-validation-for="NewGeneralSettings.SelectedDays" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Settings</button>
+    </form>
+}
+
+
+@if (Model.EmployeesWithSettings.Count > 0)
+{
+    <h2>Employee General Settings</h2>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Employee Name</th>
+                <th>Image</th>
+                <th>Bonus</th>
+                <th>Discount</th>
+                <th>Weekly Holidays</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.EmployeesWithSettings)
+            {
+                <tr>
+                    <td>@item.EmployeeId</td>
+                    <td>@item.EmployeeName</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.Image))
+                        {
+                            <img src="@Url.Content(item.Image)" alt="Employee Image" width="30" />
+                        }
+                        else
+                        {
+                            <span>No Image</span>
+                        }
+                    </td>
+                    <td>@item.BonusPerHour</td>
+                    <td>@item.RivalPerHour</td>
+                    <td>@item.WeeklyHolidays</td>
+                    <td>
+                        @if (!Model.EmployeesWithoutSettings.Any(e => e.Id == item.EmployeeId))
+                        {
+                            <a asp-action="Edit" asp-controller="GeneralSettings" asp-route-id="@item.EmployeeId" class="btn btn-warning">Edit Settings</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+}

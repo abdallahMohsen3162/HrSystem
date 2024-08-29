@@ -1,0 +1,63 @@
+﻿@model DataLayer.ViewModels.CreateUserViewModel
+
+<form asp-action="Create" method="post" class="form-horizontal">
+    <div class="mb-3">
+        <label asp-for="Username" class="form-label">User Name:</label>
+        <input asp-for="Username" class="form-control" />
+        <div class="text-danger">
+            <span asp-validation-for="Username" class="form-text text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="FullName" class="form-label">Full Name:</label>
+        <input asp-for="FullName" class="form-control" />
+        <div class="text-danger">
+            <span asp-validation-for="FullName" class="form-text "></span>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label">Email:</label>
+        <input asp-for="Email" class="form-control" />
+        <div class="text-danger">
+            <span asp-validation-for="Email" class="form-text"></span>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label">Password:</label>
+        <input asp-for="Password" type="password" class="form-control" />
+        <div class="text-danger">
+            <span asp-validation-for="Password" class="form-text"></span>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ConfirmPassword" class="form-label">Confirm Password:</label>
+        <input asp-for="ConfirmPassword" type="password" class="form-control" />
+        <div class="text-danger">
+            <span asp-validation-for="ConfirmPassword" class="form-text"></span>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Role" class="form-label">Role:</label>
+        <select asp-for="Role" class="form-select" asp-items="@(new SelectList(Model.AvailableRoles, "Name", "Name"))">
+            <option value="" disabled selected>Select a role</option>
+        </select>
+        <div class="text-danger">
+            <span asp-validation-for="Role" class="form-text"></span>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Create User</button>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

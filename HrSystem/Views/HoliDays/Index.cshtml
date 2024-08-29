@@ -1,0 +1,62 @@
+﻿@model IEnumerable<DataLayer.Entities.Holiday>
+@{
+    ViewData["Title"] = "Holidays";
+    List<string> days = ViewBag.days;
+    int i = 0;
+}
+<style>
+    .modal-backdrop {
+        z-index: 1040 !important;
+    }
+    .modal {
+        z-index: 1050 !important;
+    }
+</style>
+<h2>Holidays</h2>
+<p>
+    <a href="@Url.Action("Create")" class="btn btn-primary">Create New Holiday</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Day</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Date.ToString("yyyy-MM-dd")</td>
+                <td>@days[i++]</td>
+                <td>
+                    <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-warning">Edit</a> |
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@item.Id" data-name="@item.Name">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('#deleteModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var id = button.data('id');
+                var name = button.data('name');
+                var modal = $(this);
+                modal.find('#holidayName').text(name);
+                modal.find('#deleteButton').attr('href', '@Url.Action("Delete")/' + id);
+            });
+        });
+    </script>
+}

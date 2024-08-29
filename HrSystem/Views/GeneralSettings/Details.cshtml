@@ -1,0 +1,38 @@
+﻿@model DataLayer.ViewModels.EmployeeDetailsViewModel
+
+@{
+    ViewData["Title"] = "Employee Details";
+}
+
+<h2>Employee Details</h2>
+
+<div>
+    <h4>@Model.EmployeeName</h4>
+    <div>
+        @if (!string.IsNullOrEmpty(Model.Image))
+        {
+            <img src="@Url.Content("/"+Model.Image)" alt="Employee Image" width="150" />
+        }
+        else
+        {
+            <span>No Image Available</span>
+        }
+    </div>
+    <dl class="row">
+        <dt class="col-sm-3">Bonus Per Hour</dt>
+        <dd class="col-sm-9">@Model.BonusPerHour</dd>
+
+        <dt class="col-sm-3">Rival Per Hour</dt>
+        <dd class="col-sm-9">@Model.RivalPerHour</dd>
+
+        <dt class="col-sm-3">Weekly Holidays</dt>
+        <dd class="col-sm-9">@Model.WeeklyHolidays</dd>
+    </dl>
+</div>
+
+<a asp-action="Index" class="btn btn-primary">Back to List</a>
+@if (Model.SettingsExists)
+{
+    <a asp-action="Edit" asp-controller="GeneralSettings" asp-route-id="@Model.EmployeeId" class="btn btn-primary">Settings</a>
+}
+

@@ -1,0 +1,152 @@
+﻿@model DataLayer.ViewModels.EditeEmployeeViewModel;
+
+@{
+    var minDate = new DateTime(2005, 1, 1).ToString("yyyy-MM-dd");
+    var maxDate = DateTime.Today.ToString("yyyy-MM-dd");
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <h2 class="content-header">Edit Employee</h2>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title-wrap bar-success">
+                    <h4 class="card-title" id="horz-layout-basic">Employee Information</h4>
+                </div>
+                <p class="mb-0">Update the employee details using this form.</p>
+            </div>
+            <div class="card-body">
+                <div class="px-3">
+                    <form asp-action="Edit" method="post" class="form form-horizontal" enctype="multipart/form-data">
+                        <div class="form-body">
+                            <h4 class="form-section">
+                                <i class="icon-user"></i> Personal Details
+                            </h4>
+
+                            <div class="form-group row">
+                                <label class="col-md-3 label-control" asp-for="EmployeeName">Name: <span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <input asp-for="EmployeeName" class="form-control" />
+                                    <span asp-validation-for="EmployeeName" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-3 label-control" asp-for="Address">Address: <span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <input asp-for="Address" class="form-control" />
+                                    <span asp-validation-for="Address" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-3 label-control" asp-for="PhoneNumber">Phone Number: <span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <input asp-for="PhoneNumber" class="form-control" />
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-3 label-control" asp-for="Gender">Gender: <span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <select asp-for="Gender" class="form-control" value="@(Model.Gender)">
+                                        <option value="">-- Select Gender --</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                    <span asp-validation-for="Gender" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-3 label-control" asp-for="Nationality">Nationality: <span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <select asp-for="Nationality" class="form-control" asp-items="@(new SelectList(ViewBag.nationalities, "Value", "Text", Model.Nationality))">
+                                        <option value="">Select Nationality</option>
+                                    </select>
+                                    <span asp-validation-for="Nationality" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-3 label-control" asp-for="DateOfBirth">Date of Birth: <span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <input asp-for="DateOfBirth" type="date" class="form-control" />
+                                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-3 label-control" asp-for="NationalId">National ID: <span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <input asp-for="NationalId" class="form-control" />
+                                    <span asp-validation-for="NationalId" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-3 label-control" asp-for="JoinDate">Date of contract: <span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <input asp-for="JoinDate" type="date" class="form-control" min="@minDate" max="@maxDate" />
+                                    <span asp-validation-for="JoinDate" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-3 label-control" asp-for="Salary">Salary: <span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <input asp-for="Salary" type="number" step="0.01" class="form-control" />
+                                    <span asp-validation-for="Salary" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-3 label-control" asp-for="AttendanceTime">Attendance Time: <span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <input asp-for="AttendanceTime" type="time" class="form-control" />
+                                    <span asp-validation-for="AttendanceTime" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-3 label-control" asp-for="DepartureTime">Departure Time: <span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <input asp-for="DepartureTime" type="time" class="form-control" />
+                                    <span asp-validation-for="DepartureTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                            @if (ViewBag.imageUrl != null)
+                            {
+                                <img src="~/@ViewBag.imageUrl" alt="Profile Image" style="max-width: 200px; max-height: 200px;" />
+                            }
+                            <div class="form-group row">
+                                <label class="col-md-3 label-control">Select File: <span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <input accept="image/*" asp-for="ProfileImage" type="file" class="form-control-file" id="file" />
+                                    <span asp-validation-for="ProfileImage" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-success">
+                                <i class="icon-note"></i> Save
+                            </button>
+                            <a asp-action="Index" class="btn btn-danger mr-1">
+                                <i class="icon-trash"></i> Cancel
+                            </a>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
