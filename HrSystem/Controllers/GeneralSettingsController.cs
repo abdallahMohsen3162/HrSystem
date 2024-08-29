@@ -107,7 +107,7 @@ namespace HrSystem.Controllers
                     await _generalSettingsService.UpdateSettingsAsync(model);
                     return RedirectToAction(nameof(Index), "Employees"); 
                 }
-                catch (DbUpdateConcurrencyException ex)
+                catch (DbUpdateConcurrencyException ex) 
                 {
                     Console.WriteLine($"Concurrency error: {ex.Message}");
 
