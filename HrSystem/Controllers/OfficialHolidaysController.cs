@@ -63,13 +63,13 @@ namespace HrSystem.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Errors");
             }
 
             var holiday = await _context.Holidays.FindAsync(id);
             if (holiday == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Errors");
             }
             return View(holiday);
         }
