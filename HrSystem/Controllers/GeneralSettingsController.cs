@@ -29,7 +29,7 @@ namespace HrSystem.Controllers
             return View(viewModel);
         }
 
-
+         
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateGeneralSettings(GeneralSettingsIndexViewModel model)
@@ -114,9 +114,9 @@ namespace HrSystem.Controllers
                     return View(model); 
                 }
             }
-            if ()
+            if (model.WeeklyHolidayList.Count == 0)
             {
-
+                ModelState.AddModelError("WeeklyHolidayList", "Please select at least one holiday.");
             }
             
             var settings = await _generalSettingsService.GetSettingsByEmployeeIdAsync(id);
