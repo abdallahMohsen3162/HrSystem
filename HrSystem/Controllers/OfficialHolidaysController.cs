@@ -12,22 +12,6 @@ using DataLayer.Models;
 namespace HrSystem.Controllers 
 {
 
-    public class DateTimeMonster
-    {
-        public static string GetDayNameByDate(int day, int month, int year)
-        {
-            if (month == 1 || month == 2)
-            {
-                month += 12;
-                year -= 1;
-            }
-            int K = year % 100; 
-            int J = year / 100;
-            int h = (day + (13 * (month + 1)) / 5 + K + (K / 4) + (J / 4) - 2 * J) % 7;
-            string[] dayNames = { "Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" };
-            return dayNames[h];
-        }
-    }
     
 
     public class HolidaysController : Controller
@@ -46,7 +30,8 @@ namespace HrSystem.Controllers
             List<string> days = new List<string>();
             foreach (var holiday in model)
             {
-                string str = DateTimeMonster.GetDayNameByDate(holiday.Date.Day, holiday.Date.Month, holiday.Date.Year);
+                DateTime date = new DateTime(holiday.Date.Year, holiday.Date.Month, holiday.Date.Day);
+                string str = date.DayOfWeek.ToString();
                 days.Add(str);
             }
             ViewBag.days = days;
