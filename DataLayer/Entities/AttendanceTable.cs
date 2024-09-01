@@ -5,6 +5,7 @@ using DataLayer.Validation;
 
 namespace DataLayer.Entities
 {
+    
     public class AttendanceTable
     {
         [Key]
@@ -17,8 +18,9 @@ namespace DataLayer.Entities
         public Employee? Employee { get; set; }
 
         [Required]
-        public TimeSpan AttendanceTime { get; set; } 
-
+        [TimeRangeValidation]
+        public TimeSpan AttendanceTime { get; set; }
+        [Required]
         public TimeSpan? DepartureTime { get; set; }
 
         [Required]

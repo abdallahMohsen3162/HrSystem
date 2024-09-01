@@ -6,9 +6,35 @@
 
 <h1>Attendance List</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<form method="get" asp-action="Index">
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label for="employeeId" class="form-label">Select Employee</label>
+            <select class="form-select" id="employeeId" name="employeeId">
+                <option value="">All Employees</option>
+                @foreach (var employee in (SelectList)ViewData["Employees"])
+                {
+                    <option value="@employee.Value">@employee.Text</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="startDate" class="form-label">Start Date</label>
+            <input type="date" class="form-control" id="startDate" name="startDate">
+        </div>
+        <div class="col-md-3">
+            <label for="endDate" class="form-label">End Date</label>
+            <input type="date" class="form-control" id="endDate" name="endDate">
+        </div>
+        <div class="col-2">
+            <button type="submit" class="btn btn-primary w-100">Search</button>
+        </div>
+    </div>
+</form>
+
+<a asp-controller="Attendance" asp-action="Create" Text="Create">
+    Create
+</a>
 
 <table class="table">
     <thead>
@@ -29,10 +55,29 @@
                 <td>@item.DepartureTime</td>
                 <td>@item.Date.ToShortDateString()</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@item.Id" data-name="@item.Employee.EmployeeName">
+                        Delete
+                    </button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var id = button.getAttribute('data-id');
+            var name = button.getAttribute('data-name');
+            var holidayName = deleteModal.querySelector('#holidayName');
+            holidayName.textContent = name;
+
+            var deleteButton = deleteModal.querySelector('#deleteButton');
+            deleteButton.href = '@Url.Action("Delete", "Attendance")/' + id;
+        });
+    </script>
+}

@@ -2,9 +2,10 @@
 
 @{
     ViewData["Title"] = "Create Attendance";
+    var today = DateTime.Today;
 }
 
-<h1>Create Attendance</h1>
+<h1>Create Attendance @today.ToString("dd/MM/yyyy")</h1>
 
 <form asp-action="Create">
     <div class="form-group">
@@ -37,11 +38,19 @@
 
 
     <div class="form-group">
-        <label asp-for="Date" class="control-label"></label>
-        <input asp-for="Date" class="form-control" type="date" />
+        <label asp-for="Date" class="control-label">Date</label>
+        <input asp-for="Date" class="form-control" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
         <span asp-validation-for="Date" class="text-danger"></span>
+
     </div>
+
     <div class="form-group">
         <input type="submit" value="Create" class="btn btn-primary" />
     </div>
 </form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
