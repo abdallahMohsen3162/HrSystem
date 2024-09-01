@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 using DataLayer.Validation;
 
 namespace DataLayer.Entities
@@ -18,13 +14,12 @@ namespace DataLayer.Entities
         [ForeignKey("Employee")]
         public int EmployeeId { get; set; }
 
-        public Employee Employee { get; set; }
+        public Employee? Employee { get; set; }
 
         [Required]
-        [TimeSpanValidation(ErrorMessage = "Attendance time must be before departure time.")]
-        public DateTime AttendanceTime { get; set; }
+        public TimeSpan AttendanceTime { get; set; } 
 
-        public DateTime? DepartureTime { get; set; }
+        public TimeSpan? DepartureTime { get; set; }
 
         [Required]
         public DateTime Date { get; set; }

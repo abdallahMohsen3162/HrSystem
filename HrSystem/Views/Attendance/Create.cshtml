@@ -1,0 +1,47 @@
+﻿@model DataLayer.Entities.AttendanceTable
+
+@{
+    ViewData["Title"] = "Create Attendance";
+}
+
+<h1>Create Attendance</h1>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="EmployeeId" class="control-label"></label>
+        <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.Employees"></select>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+                <label class="col-md-3 label-control" asp-for="AttendanceTime">Start time: <span class="text-danger">*</span></label>
+            <div class="row form-group">
+                <div class="position-relative has-icon-left col-lg-9">
+                    <input asp-for="AttendanceTime" type="time" class="form-control" />
+                    <span asp-validation-for="AttendanceTime" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+                <label class="col-md-3 label-control" asp-for="DepartureTime">End time: <span class="text-danger">*</span></label>
+            <div class="row form-group">
+                <div class="position-relative has-icon-left col-lg-9">
+                    <input asp-for="DepartureTime" type="time" class="form-control" />
+                    <span asp-validation-for="DepartureTime" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <label asp-for="Date" class="control-label"></label>
+        <input asp-for="Date" class="form-control" type="date" />
+        <span asp-validation-for="Date" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+</form>

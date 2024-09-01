@@ -1,51 +1,53 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DataLayer;
 using DataLayer.Entities;
-using DataLayer.Data;
+using DataLayer.Data; // Assuming this is the namespace for your DbContext
+using System.Threading.Tasks;
+using System.Linq;
+using System;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HrSystem.Controllers
 {
-
-    public class AttendanceTableController : Controller
+    public class AttendanceController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public AttendanceTableController(ApplicationDbContext context)
+        public AttendanceController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: AttendanceTable
+        // GET: Attendance
         public async Task<IActionResult> Index()
         {
-            var attendanceTables = await _context.AttendanceTables.Include(a => a.Employee).ToListAsync();
-            return View(attendanceTables);
+            var attendances = await _context.AttendanceTables.Include(a => a.Employee).ToListAsync();
+            return View(attendances);
         }
 
-        // GET: AttendanceTable/Create
+        // GET: Attendance/Create
         public IActionResult Create()
         {
+            ViewBag.Employees = new SelectList(_context.Employee, "Id", "EmployeeName");
             return View();
         }
 
-        // POST: AttendanceTable/Create
+        // POST: Attendance/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,EmployeeId,AttendanceTime,DepartureTime,Date")] AttendanceTable attendanceTable)
+        public async Task<IActionResult> Create(AttendanceTable attendance)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(attendanceTable);
+                _context.Add(attendance);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(attendanceTable);
+            ViewBag.Employees = new SelectList(_context.Employee, "Id", "Name", attendance.EmployeeId);
+            return View(attendance);
         }
 
-        // GET: AttendanceTable/Edit/5
+        // GET: Attendance/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -53,20 +55,21 @@ namespace HrSystem.Controllers
                 return NotFound();
             }
 
-            var attendanceTable = await _context.AttendanceTables.FindAsync(id);
-            if (attendanceTable == null)
+            var attendance = await _context.AttendanceTables.FindAsync(id);
+            if (attendance == null)
             {
                 return NotFound();
             }
-            return View(attendanceTable);
+            ViewBag.Employees = new SelectList(_context.Employee, "Id", "Name", attendance.EmployeeId);
+            return View(attendance);
         }
 
-        // POST: AttendanceTable/Edit/5
+        // POST: Attendance/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,EmployeeId,AttendanceTime,DepartureTime,Date")] AttendanceTable attendanceTable)
+        public async Task<IActionResult> Edit(int id, AttendanceTable attendance)
         {
-            if (id != attendanceTable.Id)
+            if (id != attendance.Id)
             {
                 return NotFound();
             }
@@ -75,12 +78,12 @@ namespace HrSystem.Controllers
             {
                 try
                 {
-                    _context.Update(attendanceTable);
+                    _context.Update(attendance);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AttendanceTableExists(attendanceTable.Id))
+                    if (!_context.AttendanceTables.Any(e => e.Id == attendance.Id))
                     {
                         return NotFound();
                     }
@@ -91,10 +94,11 @@ namespace HrSystem.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(attendanceTable);
+            ViewBag.Employees = new SelectList(_context.Employee, "Id", "Name", attendance.EmployeeId);
+            return View(attendance);
         }
 
-        // GET: AttendanceTable/Delete/5
+        // GET: Attendance/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -102,30 +106,26 @@ namespace HrSystem.Controllers
                 return NotFound();
             }
 
-            var attendanceTable = await _context.AttendanceTables
+            var attendance = await _context.AttendanceTables
+                .Include(a => a.Employee)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (attendanceTable == null)
+            if (attendance == null)
             {
                 return NotFound();
             }
 
-            return View(attendanceTable);
+            return View(attendance);
         }
 
-        // POST: AttendanceTable/Delete/5
+        // POST: Attendance/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var attendanceTable = await _context.AttendanceTables.FindAsync(id);
-            _context.AttendanceTables.Remove(attendanceTable);
+            var attendance = await _context.AttendanceTables.FindAsync(id);
+            _context.AttendanceTables.Remove(attendance);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool AttendanceTableExists(int id)
-        {
-            return _context.AttendanceTables.Any(e => e.Id == id);
         }
     }
 }
