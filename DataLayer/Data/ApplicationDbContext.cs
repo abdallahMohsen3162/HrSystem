@@ -16,6 +16,8 @@ namespace DataLayer.Data
 
         public DbSet<Holiday> Holidays { get; set; }
 
+        public DbSet<AttendanceTable> AttendanceTables { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<GeneralSettings>()
