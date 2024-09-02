@@ -65,13 +65,6 @@ namespace HrSystem.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            Console.WriteLine("############");
-            Console.WriteLine("############");
-            Console.WriteLine("############");
-            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-            {
-                Console.WriteLine(error.ErrorMessage);
-            }
             ViewBag.Employees = new SelectList(_context.Employee, "Id", "EmployeeName", attendance.EmployeeId);
             return View(attendance);
         }
@@ -125,7 +118,10 @@ namespace HrSystem.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-
+            foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                Console.WriteLine(error.ErrorMessage);
+            }
             ViewBag.Employees = new SelectList(_context.Employee, "Id", "EmployeeName", attendance.EmployeeId);
             return View(attendance);
         }

@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Search Employee Monthly Report";
+    var employees = ViewData["Employees"] as SelectList;
+}
+
+<h2>Search Employee Monthly Report</h2>
+
+<form asp-action="EmployeeMonthlyReport" method="get">
+    <div class="form-group">
+        <label for="employeeId">Employee</label>
+        <select class="form-control" id="employeeId" name="employeeId" required>
+            <option value="">Select Employee</option>
+            @foreach (var employee in employees)
+            {
+                <option value="@employee.Value">@employee.Text</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="year">Year</label>
+        <input type="number" class="form-control" id="year" name="year" required />
+    </div>
+    <div class="form-group">
+        <label for="month">Month</label>
+        <input type="number" class="form-control" id="month" name="month" min="1" max="12" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
