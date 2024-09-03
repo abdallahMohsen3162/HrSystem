@@ -37,7 +37,6 @@ namespace YourNamespace.Controllers
                 .Include(e => e.GeneralSettings)
                 .FirstOrDefaultAsync(e => e.Id == employeeId);
 
-
             decimal bonusesByHours = 0;
             decimal deductionsByHours = 0;
             int attendedDays = 0;
@@ -80,7 +79,7 @@ namespace YourNamespace.Controllers
                     {
                         var lateHours = (attendanceRecord.AttendanceTime - employee.AttendanceTime).TotalHours;
                         deductionsByHours += (decimal)lateHours * employee.GeneralSettings.rivalPerHour;
-                        detail.Deduction += (decimal)lateHours * employee.GeneralSettings.rivalPerHour;
+                        detail.Deduction = (decimal)lateHours * employee.GeneralSettings.rivalPerHour;
                     }
                     else if (attendanceRecord.AttendanceTime < employee.AttendanceTime)
                     {
@@ -109,7 +108,6 @@ namespace YourNamespace.Controllers
                     {
                         absentDays++;
 
-                        // Add deduction for missing a non-holiday workday
                         var missedDayHours = (employee.DepartureTime - employee.AttendanceTime).TotalHours;
                         var missedDayDeduction = (decimal)missedDayHours * employee.GeneralSettings.rivalPerHour;
                         deductionsByHours += missedDayDeduction;
@@ -123,7 +121,12 @@ namespace YourNamespace.Controllers
             decimal HourPrice = (employee.Salary / 30) / (employee.DepartureTime - employee.AttendanceTime).Hours;
 
             var netSalary = employee.Salary + HourPrice * (bonusesByHours - deductionsByHours);
-            
+
+            if (absentDays == decimal.Zero && attendedDays == decimal.Zero)
+            {
+                HourPrice = 0;
+                netSalary = employee.Salary;
+            }
 
             var report = new EmployeeMonthlyReportViewModel
             {
@@ -134,13 +137,14 @@ namespace YourNamespace.Controllers
                 BonusesByHours = bonusesByHours,
                 DeductionsByHours = deductionsByHours,
                 NetSalary = netSalary,
-                DailyDetails = dailyDetails
+                DailyDetails = dailyDetails,
+                HourPrice = HourPrice,
+                BonusesByMoney = bonusesByHours * HourPrice,
+                DeductionsByMoney = deductionsByHours * HourPrice
             };
 
             return View(report);
         }
-
-
 
 
     }

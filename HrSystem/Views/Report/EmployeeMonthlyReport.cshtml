@@ -1,4 +1,4 @@
-﻿@model DataLayer.ViewModels.EmployeeMonthlyReportViewModel;
+﻿@model DataLayer.ViewModels.EmployeeMonthlyReportViewModel
 
 @{
     ViewBag.Title = "Employee Monthly Report";
@@ -18,7 +18,11 @@
         <tbody>
             <tr>
                 <td>Basic Salary</td>
-                <td>@Model.BasicSalary</td>
+                <td>@Model.BasicSalary.ToString("C")</td>
+            </tr>
+            <tr>
+                <td>Hour Price</td>
+                <td>@Model.HourPrice</td>
             </tr>
             <tr>
                 <td>Attended Days</td>
@@ -29,21 +33,28 @@
                 <td>@Model.AbsentDays</td>
             </tr>
             <tr>
-                <td>Total Bonuses</td>
+                <td>Total Bonuses (Hours)</td>
                 <td>@Model.BonusesByHours</td>
             </tr>
             <tr>
-                <td>Total Deductions</td>
+                <td>Total Bonuses (Money)</td>
+                <td>@Model.BonusesByMoney.ToString("C")</td>
+            </tr>
+            <tr>
+                <td>Total Deductions (Hours)</td>
                 <td>@Model.DeductionsByHours</td>
             </tr>
             <tr>
+                <td>Total Deductions (Money)</td>
+                <td>@Model.DeductionsByMoney.ToString("C")</td>
+            </tr>
+            <tr>
                 <td><strong>Net Salary</strong></td>
-                <td><strong>@Model.NetSalary.ToString("C")</strong></td>
-            </tr> 
+                <td><strong>@Model.NetSalary</strong></td>
+            </tr>
         </tbody>
     </table>
 </div>
-
 
 <h3>Daily Attendance Details</h3>
 
@@ -65,17 +76,13 @@
         {
             <tr>
                 <td>@detail.Date.ToString("yyyy-MM-dd")</td>
-                <td>@(detail.IsHoliday ? "Yes" : "No")</td>
-                <td>@(detail.IsWeeklyHoliday ? "Yes" : "No")</td>
+                <td>@(detail.IsHoliday ? "Yes" : "")</td>
+                <td>@(detail.IsWeeklyHoliday ? "Yes" : "")</td>
                 <td>@(detail.Attended ? "Yes" : "No")</td>
                 <td>@(detail.ArrivalTime.HasValue ? detail.ArrivalTime.Value.ToString(@"hh\:mm") : "-")</td>
                 <td>@(detail.DepartureTime.HasValue ? detail.DepartureTime.Value.ToString(@"hh\:mm") : "-")</td>
-                <td>
-                    @detail.Bonus
-                </td>
-                <td>
-                    @detail.Deduction
-                </td>
+                <td>@detail.Bonus</td>
+                <td>@detail.Deduction</td>
             </tr>
         }
     </tbody>

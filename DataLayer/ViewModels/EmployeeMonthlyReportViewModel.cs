@@ -29,7 +29,7 @@ namespace DataLayer.ViewModels
 
         public decimal? Deduction { get; set; }
         public decimal? Bonus { get; set; }
-
+       
 
     }
 
@@ -41,8 +41,10 @@ namespace DataLayer.ViewModels
         public int AbsentDays { get; set; }
         public decimal BonusesByHours { get; set; }
         public decimal DeductionsByHours { get; set; }
+        public decimal BonusesByMoney { get; set; }
+        public decimal DeductionsByMoney { get; set; }
         public decimal NetSalary { get; set; }
-
+        public decimal? HourPrice { get; set; }
         public List<DailyAttendanceDetail> DailyDetails { get; set; }
     }
 
