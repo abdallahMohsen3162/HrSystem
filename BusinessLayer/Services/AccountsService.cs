@@ -173,7 +173,6 @@ namespace BusinessLayer.Services
             }
             catch (Exception ex)
             {
-                // Log the exception
                 Console.WriteLine($"Error during sign-in: {ex.Message}");
                 return SignInResult.Failed;
             }

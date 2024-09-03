@@ -26,9 +26,9 @@ namespace BusinessLayer.Services
                 EmployeeId = e.Id,
                 EmployeeName = e.EmployeeName,
                 Image = e.image,
-                BonusPerHour = e.GeneralSettings?.bonusPerHoure ?? 0, // Default to 0 if null
-                RivalPerHour = e.GeneralSettings?.rivalPerHour ?? 0, // Default to 0 if null
-                WeeklyHolidays = e.GeneralSettings?.WeeklyHolidays ?? "Not Set" // Default to "Not Set" if null
+                BonusPerHour = e.GeneralSettings?.bonusPerHoure ?? 0, 
+                RivalPerHour = e.GeneralSettings?.rivalPerHour ?? 0,
+                WeeklyHolidays = e.GeneralSettings?.WeeklyHolidays ?? "Not Set" 
             }).ToList();
         }
 

@@ -90,7 +90,7 @@ namespace BusinessLayer.Services
             var role = await _roleManager.FindByNameAsync(roleName);
             if (role == null)
             {
-                return new List<Claim>(); // Or handle the null case appropriately
+                return new List<Claim>();
             }
 
             var claims = await _roleManager.GetClaimsAsync(role);
