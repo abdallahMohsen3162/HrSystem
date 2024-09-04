@@ -78,7 +78,8 @@ namespace HrSystem.Controllers
                 .ToListAsync();
 
             var report = GenerateEmployeeMonthlyReport(employee, month, year, holidays);
-
+            var employees = _context.Employee.ToList();
+            ViewData["Employees"] = new SelectList(employees, "Id", "EmployeeName");
             return View(report);
         }
 
