@@ -28,5 +28,11 @@ namespace DataLayer.Entities
         [Required]
         [UniqueEmployeeAttendance]
         public DateTime Date { get; set; }
+
+        public decimal ?Bonus { get; set; }
+        public decimal ?Discount { get; set; }
+        [Range(0,8)]
+        public decimal ?EarlyTime { get; set; }
+
     }
 }

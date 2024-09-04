@@ -26,6 +26,13 @@
     </div>
 
     <div class="form-group">
+        <label asp-for="EarlyTime" class="control-label">Permession for Leaving early</label>
+        <input asp-for="EarlyTime" type="number" class="form-control" />
+        <span asp-validation-for="EarlyTime" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
         <label asp-for="Date" class="control-label"></label>
         <input asp-for="Date" class="form-control" type="date" />
         <span asp-validation-for="Date" class="text-danger"></span>

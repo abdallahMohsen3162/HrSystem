@@ -16,4 +16,5 @@ namespace DataLayer.Entities
         Friday = 5,
         Saturday = 6
     }
+    
 }

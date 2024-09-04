@@ -18,8 +18,12 @@
         </select>
     </div>
     <div class="form-group">
-        <label for="year">Year</label>
-        <input type="number" class="form-control" id="year" name="year" required />
+        <select name="year" class="form-control form-control-sm">
+            @for (int year = 2024; year <= 2050; year++)
+            {
+                <option value="@year">@year</option>
+            }
+        </select>
     </div>
     <div class="form-group">
         <label for="month">Month</label>

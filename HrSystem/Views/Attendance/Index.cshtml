@@ -57,6 +57,11 @@
             <th>Attendance Time</th>
             <th>Departure Time</th>
             <th>Date</th>
+            <th>Discount(hours)</th>
+            <th>Bonus(hours)</th>
+            <th>Employee Attendance Time</th>
+            <th>Employee Departure Time</th>
+            <th>Permession</th>
             <th></th>
         </tr>
     </thead>
@@ -68,6 +73,11 @@
                 <td>@item.AttendanceTime</td>
                 <td>@item.DepartureTime</td>
                 <td>@item.Date.ToShortDateString()</td>
+                <td>@item.Discount</td>
+                <td>@item.Bonus</td>
+                <td>@item.Employee.AttendanceTime</td>
+                <td>@item.Employee.DepartureTime</td>
+                <td>@item.EarlyTime</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
                     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@item.Id" data-name="@item.Employee.EmployeeName">

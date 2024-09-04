@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using static DataLayer.Entities.AuthConstants;
 
 
 namespace HrSystem.Controllers
@@ -19,7 +20,7 @@ namespace HrSystem.Controllers
             _context = context;
         }
 
-        // GET: Attendance
+
         public async Task<IActionResult> Index(int? employeeId, DateTime? startDate, DateTime? endDate)
         {
             var attendanceQuery = _context.AttendanceTables.Include(a => a.Employee).AsQueryable();
@@ -60,14 +61,30 @@ namespace HrSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(attendance);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var employee = await _context.Employee.FindAsync(attendance.EmployeeId);
+                if (employee != null)
+                {
+
+                    attendance.Discount = 0;
+                    attendance.Bonus = 0;
+                    attendance.Discount += Math.Max((decimal)(employee.DepartureTime - attendance.DepartureTime)?.TotalHours, 0);
+                    attendance.Discount += Math.Max((decimal)(attendance.AttendanceTime - employee.AttendanceTime).TotalHours, 0);
+                    attendance.Bonus += Math.Max((decimal)(employee.DepartureTime - attendance.DepartureTime)?.TotalHours, 0);
+
+
+                    _context.Add(attendance);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+
+
+                ModelState.AddModelError("", "Employee not found");
             }
 
             ViewBag.Employees = new SelectList(_context.Employee, "Id", "EmployeeName", attendance.EmployeeId);
             return View(attendance);
         }
+
 
 
         public async Task<IActionResult> Edit(int? id)
@@ -102,6 +119,12 @@ namespace HrSystem.Controllers
             {
                 try
                 {
+                    var employee = await _context.Employee.FindAsync(attendance.EmployeeId);
+                    attendance.Discount = 0;
+                    attendance.Bonus = 0;
+                    attendance.Discount += Math.Max((decimal)(employee.DepartureTime - attendance.DepartureTime)?.TotalHours, 0);
+                    attendance.Discount += Math.Max((decimal)(attendance.AttendanceTime - employee.AttendanceTime).TotalHours, 0);
+                    attendance.Bonus += Math.Max((decimal)(attendance.DepartureTime - employee.DepartureTime)?.TotalHours, 0);
                     _context.Update(attendance);
                     await _context.SaveChangesAsync();
                 }
