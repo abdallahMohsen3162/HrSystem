@@ -2,9 +2,7 @@
 
 <h1>Permessions</h1>
 
-
-
-<form method="get" asp-action="Permessions" class="mb-4">
+<form method="get" asp-action="Permissions" class="mb-4">
     <div class="row align-items-center">
 
         <div class="col-md-3">
@@ -13,23 +11,32 @@
                 <option value="">All Employees</option>
                 @foreach (var employee in (SelectList)ViewData["Employees"])
                 {
-                    <option value="@employee.Value">@employee.Text</option>
+                    @if (ViewBag.employeeId?.ToString() == employee.Value)
+                    {
+                        <option value="@employee.Value" selected>
+                            @employee.Text
+                        </option>
+                    }
+
+                    {
+                        <option value="@employee.Value">
+                            @employee.Text
+                        </option>
+                    }
+
                 }
             </select>
         </div>
 
-
         <div class="col-md-2">
             <label for="startDate" class="form-label">Start Date</label>
-            <input type="date" class="form-control" id="startDate" name="startDate">
+            <input value="@ViewBag.startDate" type="date" class="form-control" id="startDate" name="startDate">
         </div>
-
 
         <div class="col-md-2">
             <label for="endDate" class="form-label">End Date</label>
-            <input type="date" class="form-control" id="endDate" name="endDate">
+            <input value="@ViewBag.endDate" type="date" class="form-control" id="endDate" name="endDate">
         </div>
-
 
         <div class="col-md-2" style="margin-top: 45px">
             <button type="submit" class="btn btn-primary w-100 d-flex align-items-center justify-content-center">
@@ -42,17 +49,18 @@
 
 
 
+
 <table class="table">
     <thead>
         <tr>
             <th>Employee Name</th>
             <th>Attendance Time</th>
-            <th>Departure Time</th>
             <th>Date</th>
-            <th>Discount(hours)</th>
+           <th>Departure Time</th>
+            @*         <th>Discount(hours)</th>
             <th>Bonus(hours)</th>
             <th>Employee Attendance Time</th>
-            <th>Employee Departure Time</th>
+            <th>Employee Departure Time</th> *@
             <th>Permession</th>
             <th></th>
         </tr>
@@ -61,16 +69,17 @@
         @foreach (var item in Model)
         {
             <tr>
+                <td>@item.Employee.EmployeeName</td>
                 <td>@item.AttendanceTime</td>
                 <td>@item.DepartureTime</td>
                 <td>@item.Date.ToShortDateString()</td>
-                <td>@item.Discount</td>
+@*                 <td>@item.Discount</td>
                 <td>@item.Bonus</td>
                 <td>@item.Employee.AttendanceTime</td>
-                <td>@item.Employee.DepartureTime</td>
+                <td>@item.Employee.DepartureTime</td> *@
                 <td>@item.EarlyTime</td>
                 <td>
-                    <a asp-action="EditPermissions" asp-route-id="@item.Id" class="btn btn-warning">Permession</a>
+                    <a asp-action="EditPermissions" asp-route-id="@item.Id" class="btn btn-warning">Edit Permession</a>
                 </td>
             </tr>
         }

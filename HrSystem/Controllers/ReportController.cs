@@ -56,7 +56,8 @@ namespace HrSystem.Controllers
                     monthlyReports.Add(report);
                 }
             }
-
+            ViewBag.month = month;
+            ViewBag.year = year;
             return View(monthlyReports);
         }
 
@@ -179,7 +180,7 @@ namespace HrSystem.Controllers
 
 
                 decimal netSalary = SalaryTillNow + (totalBonusMoney - totalDiscountsMoney);
-
+                netSalary *= (attendanceRecords.Count > 0 ? 1 : 0);
                 return new EmployeeMonthlyReportViewModel
                 {
                     EmployeeName = employee.EmployeeName,

@@ -4,16 +4,18 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using BusinessLayer.Interfaces;
+using DataLayer.Data;
 
 namespace HrSystem.Controllers
 {
     public class HolidaysController : Controller
     {
         private readonly BusinessLayer.Interfaces.IHolidayService _holidayService;
-
-        public HolidaysController(BusinessLayer.Interfaces.IHolidayService holidayService)
+        private readonly ApplicationDbContext _context;
+        public HolidaysController(BusinessLayer.Interfaces.IHolidayService holidayService, ApplicationDbContext context)
         {
             _holidayService = holidayService;
+            _context = context;
         }
 
         public async Task<IActionResult> Index()
@@ -85,6 +87,9 @@ namespace HrSystem.Controllers
             }
             return View(holiday);
         }
+
+
+
 
         public async Task<IActionResult> Delete(int? id)
         {

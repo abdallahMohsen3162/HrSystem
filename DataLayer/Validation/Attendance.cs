@@ -1,7 +1,9 @@
 ﻿using DataLayer.Data;
 using DataLayer.Entities;
+using DataLayer.ViewModels;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace DataLayer.Validation
 {
@@ -45,5 +47,68 @@ namespace DataLayer.Validation
             return ValidationResult.Success;
         }
     }
+
+
+    //public class ExistingAttendanceRecordAttribute : ValidationAttribute
+    //{
+    //    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+    //    {
+    //        var model = (SaveEarlyTimeViewModel)validationContext.ObjectInstance;
+    //        var _context = (ApplicationDbContext)validationContext.GetService(typeof(ApplicationDbContext));
+
+    //        var attendanceRecord = _context.AttendanceTables
+    //            .FirstOrDefault(a => a.EmployeeId == model.EmployeeId && a.Date == model.Date);
+
+    //        if (attendanceRecord != null)
+    //        {
+    //            return ValidationResult.Success; 
+    //        }
+
+    //        return new ValidationResult("Attendance does not exist for the specified employee and date");
+    //    }
+    //}
+
+
+    public class PrivateHolidayExistsInHolidaysAttribute : ValidationAttribute
+    {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            var model = (PrivateHoliday)validationContext.ObjectInstance;
+            var _context = (ApplicationDbContext)validationContext.GetService(typeof(ApplicationDbContext));
+            var dayExistsBefore = _context.PrivateHolidays.Where(p => p.HolidayDate == model.HolidayDate && p.EmployeeId == model.EmployeeId && p.Id != model.Id).FirstOrDefault();
+            var officialHolidays = _context.Holidays.Where(h => h.Date == model.HolidayDate).FirstOrDefault();
+            if (dayExistsBefore != null || officialHolidays != null)
+            {
+                return new ValidationResult("This holiday already exists.");
+            }
+
+        
+    
+            int empId = model.EmployeeId;
+
+            var dayOfWeek = model.HolidayDate.DayOfWeek;
+
+            var employeeGeneralSettings = _context.GeneralSettings.FirstOrDefault(gs => gs.EmployeeId == empId);
+            HashSet<int> st = new HashSet<int>();
+            if (employeeGeneralSettings != null)
+            {
+  
+                var weeklyHolidays = employeeGeneralSettings.WeeklyHolidayList.ToList();
+                for(int i = 0; i < weeklyHolidays.Count; i++)
+                {
+                    int x = (int)weeklyHolidays[i];
+                    st.Add(x);
+                }
+
+                if (st.Contains((int)dayOfWeek))
+                {
+                    return new ValidationResult("The selected date falls on a weekly holiday.");
+                }
+            }
+
+            return ValidationResult.Success;
+        }
+    }
+
 
 }

@@ -36,6 +36,7 @@ namespace HrSystem.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 _context.Add(privateHoliday);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -79,6 +80,20 @@ namespace HrSystem.Controllers
             _context.PrivateHolidays.Remove(privateHoliday);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        [AcceptVerbs("Get", "Post")]
+        public IActionResult ValidateAttendanceRecord(int employeeId, DateTime holidayDate)
+        {
+            
+            var attendanceRecord = _context.AttendanceTables
+                .FirstOrDefault(a => a.EmployeeId == employeeId && a.Date == holidayDate);
+
+            if (attendanceRecord != null)
+            {
+                return Json(true);
+            }
+            return Json("Attendance does not exist for the specified employee and date.");
         }
 
 

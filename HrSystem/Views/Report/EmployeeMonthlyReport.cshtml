@@ -5,8 +5,10 @@
     var employees = ViewData["Employees"] as SelectList;
 }
 
-<h2>Employee Monthly Report  @* @ViewBag.DaysInMonth.ToString("F0") / @ViewBag.Month In Account *@ </h2>
-<a asp-action="MultiReport">All Reports</a>
+<div class="container d-flex justify-content-between">
+    <h2>Employee Monthly Report </h2>
+    <a class="btn btn-primary" asp-action="MultiReport">All Reports</a>
+</div>
 
 @await Component.InvokeAsync("ReportSearch")
 <div>

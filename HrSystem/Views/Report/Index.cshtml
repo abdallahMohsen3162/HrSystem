@@ -3,8 +3,10 @@
     var employees = ViewData["Employees"] as SelectList;
 }
 
-<h2>Search Employee Monthly Report</h2>
-<a asp-action="MultiReport" asp-controller="Report">All Reports</a>
+<div class="container-fluid d-flex justify-content-between">
+    <h2>Search Employee Monthly Report</h2>
+    <a class="btn btn-primary" asp-action="MultiReport" asp-controller="Report">All Reports</a>
+</div>
 
 @await Component.InvokeAsync("ReportSearch")
 
