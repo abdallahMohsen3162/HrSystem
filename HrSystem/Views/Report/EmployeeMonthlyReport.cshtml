@@ -8,40 +8,13 @@
 <h2>Employee Monthly Report  @* @ViewBag.DaysInMonth.ToString("F0") / @ViewBag.Month In Account *@ </h2>
 <a asp-action="MultiReport">All Reports</a>
 
-<form asp-action="EmployeeMonthlyReport" method="get">
-    <div class="d-flex w-100 align-items-stretch">
-
-
-            <select class="form-control" id="employeeId" name="employeeId" required>
-                <option value="">Select Employee</option>
-                @foreach (var employee in employees)
-                {
-                    <option value="@employee.Value">@employee.Text</option>
-                }
-            </select>
-
-
-            <select style="height:100%" name="year" class="form-control h-100 form-control-sm" id="year">
-                @for (int year = 2024; year <= 2050; year++)
-                {
-                    <option value="@year">@year</option>
-                }
-            </select>
-
-
-            <input type="number" class="form-control" id="month" name="month" min="1" max="12" required />
-
-
-
-            <button type="submit" class="btn btn-primary btn-block">Search</button>
-
-    </div>
-</form>
-
-
-
+@await Component.InvokeAsync("ReportSearch")
 <div>
-    <h3>Employee: @Model.EmployeeName</h3>
+    <div class="form-group d-flex justify-content-between">
+        <h3>Employee: @Model.EmployeeName</h3>
+        <h3>Month: @ViewBag.month</h3>
+        <h3>Year: @ViewBag.year</h3>
+    </div>
     <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; border-collapse: collapse;">
         <thead>
             <tr>

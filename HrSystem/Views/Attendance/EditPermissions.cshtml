@@ -1,0 +1,44 @@
+﻿@model DataLayer.Entities.AttendanceTable
+
+@{
+    ViewData["Title"] = "Permession";
+}
+
+<h1>Permession</h1>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group" hidden>
+        <label asp-for="EmployeeId" class="control-label"></label>
+        <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.Employees ?? new List<SelectListItem>()"></select>
+    </div>
+
+    <div class="form-group" hidden>
+        <label asp-for="AttendanceTime" class="control-label"></label>
+        <input asp-for="AttendanceTime" type="time" class="form-control" placeholder="HH:mm" />
+        <span asp-validation-for="AttendanceTime" class="text-danger"></span>
+    </div>
+
+    <div class="form-group" hidden>
+        <label asp-for="DepartureTime" class="control-label"></label>
+        <input asp-for="DepartureTime" type="time" class="form-control" placeholder="HH:mm" />
+        <span asp-validation-for="DepartureTime" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EarlyTime" class="control-label">Permession for Leaving early</label>
+        <input asp-for="EarlyTime" type="number" class="form-control" />
+        <span asp-validation-for="EarlyTime" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group" hidden>
+        <label asp-for="Date" class="control-label"></label>
+        <input asp-for="Date" class="form-control" type="date" />
+        <span asp-validation-for="Date" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+        <a class="btn btn-gray" asp-action="Index">Cancel</a>
+    </div>
+</form>

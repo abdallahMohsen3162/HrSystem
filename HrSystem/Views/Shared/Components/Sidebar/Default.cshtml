@@ -42,9 +42,26 @@
                     <a asp-action="Index" asp-controller="Roles" ><i class="icon-equalizer"></i><span data-i18n="" class="menu-title">Permissions</span></a>
                 </li>
 
-                <li class="nav-item">
-                    <a asp-action="Index" asp-controller="Holidays"><i class="icon-equalizer"></i><span data-i18n="" class="menu-title">Official Holidays</span></a>
+
+                <li class="has-sub nav-item">
+                    <a href="#"><i class="icon-users"></i><span data-i18n="" class="menu-title">Holidays</span></a>
+                    <ul class="menu-content">
+
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="Holidays"><i class="icon-equalizer"></i><span data-i18n="" class="menu-title">Official Holidays</span></a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a asp-action="Permissions" asp-controller="Attendance"><i class="icon-equalizer"></i><span data-i18n="" class="menu-title">Permissions</span></a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="PrivateHolidays"><i class="icon-equalizer"></i><span data-i18n="" class="menu-title">Private Holidays</span></a>
+                        </li>
+                    </ul>
                 </li>
+
+
 
                 <li class="nav-item">
                     <a href="login.html"><i class="icon-pin"></i><span data-i18n="" class="menu-title">Login Page</span></a>

@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "Employee Monthly Report";
+    var employees = ViewData["Employees"] as SelectList;
+}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">@ViewBag.Title</h2>
+    <form asp-action="EmployeeMonthlyReport" method="get">
+        <div class="row g-3 align-items-end">
+
+            <div class="col-md-4">
+                <label for="employeeId" class="form-label">Select Employee</label>
+                <select class="form-select" id="employeeId" name="employeeId" required>
+                    <option value="">Select Employee</option>
+                    @foreach (var employee in employees)
+                    {
+                        <option value="@employee.Value">@employee.Text</option>
+                    }
+                    }
+                </select>
+            </div>
+
+       
+            <div class="col-md-3">
+                <label for="year" class="form-label">Select Year</label>
+                <select name="year" class="form-select" id="year">
+                    @for (int year = 2024; year <= 2050; year++)
+                    {
+                        <option value="@year">@year</option>
+                    }
+                </select>
+            </div>
+
+
+            <div class="col-md-3">
+                <label for="month" class="form-label">Select Month</label>
+                <select name="month" class="form-select" id="month">
+                    @for (int month = 1; month <= 12; month++)
+                    {
+                        <option value="@month">@month</option>
+                    }
+                </select>
+            </div>
+
+
+            <div class="col-md-2" class="mt-4">
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
