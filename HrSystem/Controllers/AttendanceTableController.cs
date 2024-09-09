@@ -1,9 +1,12 @@
 ﻿using BusinessLayer.Interfaces;
 using BusinessLogic.Services;
+using DataLayer.Data;
 using DataLayer.Entities;
+using DataLayer.Migrations;
 using DataLayer.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,10 +16,12 @@ namespace HrSystem.Controllers
     public class AttendanceController : Controller
     {
         private readonly IAttendanceService _attendanceService;
-
-        public AttendanceController(IAttendanceService attendanceService)
+        private readonly ApplicationDbContext _context;
+        public AttendanceController(IAttendanceService attendanceService,
+            ApplicationDbContext context)
         {
             _attendanceService = attendanceService;
+            _context = context;
         }
 
         public async Task<IActionResult> Index(int? employeeId, DateTime? startDate, DateTime? endDate)
@@ -94,8 +99,67 @@ namespace HrSystem.Controllers
                 await _attendanceService.SaveEarlyTime(model);
                 return RedirectToAction(nameof(Permissions));
             }
-            ViewBag.Employees = new SelectList(await _attendanceService.GetEmployeesAsync(), "Id", "EmployeeName");
+            ViewData["Employees"] = new SelectList(await _attendanceService.GetEmployeesAsync(), "Id", "EmployeeName");
             return View("Permissions", model);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> CreatePermession()
+        {
+            ViewData["Employees"] = new SelectList(await _attendanceService.GetEmployeesAsync(), "Id", "EmployeeName");
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ValidateDate(DateTime date, int employeeId)
+        {
+            var attendanceRecord = await _context.AttendanceTables
+                .FirstOrDefaultAsync(a => a.EmployeeId == employeeId && a.Date == date);
+
+            Console.WriteLine(date);
+            Console.WriteLine(date);
+            Console.WriteLine(date);
+            Console.WriteLine(employeeId);
+            Console.WriteLine(employeeId);
+            Console.WriteLine(employeeId);
+            Console.WriteLine(employeeId);
+
+            if (attendanceRecord == null)
+            {
+                return Json("Attendance record does not exist for the specified date");
+            }
+
+            var permissionTaken = await _context.AttendanceTables
+                .AnyAsync(p => p.EmployeeId == employeeId && p.Date == date && p.EarlyTime != null && p.EarlyTime > 0);
+
+            if (permissionTaken)
+            {
+                return Json("The employee has already taken permission on this date");
+            }
+
+            return Json(true); 
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditPermissions(AttendanceTable model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _attendanceService.UpdateAttendance(model);
+                return RedirectToAction(nameof(Permissions));
+            }
+
+            ViewData["Employees"] = new SelectList(await _attendanceService.GetEmployeesAsync(), "Id", "EmployeeName", model.EmployeeId);
+            return View("Permissions", model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditPermissions(int id)
+        {
+            var res = await _attendanceService.GetAttendanceById(id);
+            
+            return View(res);
+        }
+
     }
 }

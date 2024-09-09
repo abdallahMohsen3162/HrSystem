@@ -57,6 +57,7 @@ namespace HrSystem.Controllers
             ViewBag.month = month;
             ViewBag.year = year;
             ViewBag.name = report.EmployeeName;
+            ViewBag.employeeId = employeeId;
             return View(report);
         }
     }

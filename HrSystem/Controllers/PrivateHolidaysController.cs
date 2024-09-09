@@ -70,17 +70,17 @@ namespace HrSystem.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [AcceptVerbs("Get", "Post")]
-        public async Task<IActionResult> ValidateAttendanceRecord(int employeeId, DateTime holidayDate)
-        {
-            var result = await _privateHolidayService.ValidateAttendanceRecord(employeeId, holidayDate);
-            return result ? Json(true) : Json("Attendance does not exist for the specified employee and date.");
-        }
 
         [AcceptVerbs("Get", "Post")]
         public async Task<IActionResult> ValidateHolidayDate(DateTime holidayDate, int employeeId, int? id)
         {
             var result = await _privateHolidayService.ValidateHolidayDate(holidayDate, employeeId, id);
+            var recordsResult = await _privateHolidayService.ValidateAttendanceRecord(employeeId, holidayDate);
+            if (recordsResult)
+            {
+                return result ? Json(true) : Json("Attendance already exists for the specified employee and date.");
+            }
+
             return result ? Json(true) : Json("This holiday already exists or falls on a weekly holiday.");
         }
     }

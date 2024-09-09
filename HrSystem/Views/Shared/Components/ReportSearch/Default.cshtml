@@ -1,10 +1,12 @@
 ﻿@{
     ViewBag.Title = "Employee Monthly Report";
     var employees = ViewData["Employees"] as SelectList;
+
 }
 
 <div class="container mt-4">
     <h2 class="text-center mb-4">@ViewBag.Title</h2>
+    
     <form asp-action="EmployeeMonthlyReport" method="get">
         <div class="row g-3 align-items-end">
 
@@ -12,11 +14,23 @@
                 <label for="employeeId" class="form-label">Select Employee</label>
                 <select class="form-select" id="employeeId" name="employeeId" required>
                     <option value="">Select Employee</option>
+
                     @foreach (var employee in employees)
                     {
+                       
+                        if (ViewBag.employeeId?.ToString() == employee.Value)
+                        {
+                            <option value="@employee.Value" selected>
+                                @employee.Text
+                            </option>
+                        }
+                        else
+                        {
+                            
                         <option value="@employee.Value">@employee.Text</option>
+                        }
                     }
-                    }
+                    
                 </select>
             </div>
 
@@ -26,7 +40,17 @@
                 <select name="year" class="form-select" id="year">
                     @for (int year = 2024; year <= 2050; year++)
                     {
+                        if (ViewBag.year == year)
+                        {
+                            <option value="@year" selected>
+                                @year
+                            </option>
+                        }
+                        else
+                        {
+                            
                         <option value="@year">@year</option>
+                        }
                     }
                 </select>
             </div>
@@ -37,7 +61,17 @@
                 <select name="month" class="form-select" id="month">
                     @for (int month = 1; month <= 12; month++)
                     {
+                        if (ViewBag.month == month)
+                        {
+                            <option value="@month" selected>
+                                @month
+                            </option>
+                        }
+                        else
+                        {
+                            
                         <option value="@month">@month</option>
+                        }
                     }
                 </select>
             </div>

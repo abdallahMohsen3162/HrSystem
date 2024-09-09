@@ -16,7 +16,7 @@ namespace DataLayer.Entities
         public int Id { get; set; }
 
         [Required]
-        [Remote(action: "ValidateAttendanceRecord", controller: "PrivateHolidays", AdditionalFields = nameof(HolidayDate))]
+        
         public int EmployeeId { get; set; }
 
         [ForeignKey(nameof(EmployeeId))]

@@ -116,6 +116,10 @@ namespace BusinessLogic.Services
         {
             var attendanceRecord = await _context.AttendanceTables
                 .FirstOrDefaultAsync(a => a.EmployeeId == model.EmployeeId && a.Date == model.Date);
+            if (attendanceRecord == null)
+            {
+                return;
+            }
             attendanceRecord.EarlyTime = model.Hours;
             await _context.SaveChangesAsync();
         }
