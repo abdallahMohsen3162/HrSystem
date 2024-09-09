@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Cors.Infrastructure;
 using BusinessLayer.Interfaces;
 using BusinessLayer.Services;
 using DataLayer.Entities;
-
-
+using BusinessLogic.Services;
+using HrSystem.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,13 +23,21 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-
+object value = builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation()
+    .AddViewOptions(option =>
+    {
+        option.HtmlHelperOptions.ClientValidationEnabled = true;
+    });
 
 builder.Services.AddScoped<IRolesService, RolesService>();
 builder.Services.AddScoped<IAccountsService, AccountsService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IGeneralSettingsService, GeneralSettingsService>();
 builder.Services.AddScoped<IHolidayService, HolidayService>();
+builder.Services.AddScoped<IAttendanceService, AttendanceService>();
+builder.Services.AddScoped<IPrivateHolidayService, PrivateHolidayService>();
+builder.Services.AddScoped<IReportService, ReportService>();
+
 
 //builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 //    .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -39,7 +47,7 @@ var app = builder.Build();
 
 
 
-// Configure the HTTP request pipeline.
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

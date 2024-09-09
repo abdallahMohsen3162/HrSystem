@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web.Mvc;
 using DataLayer.Validation;
 
 namespace DataLayer.Entities
@@ -26,7 +27,6 @@ namespace DataLayer.Entities
         public TimeSpan? DepartureTime { get; set; }
 
         [Required]
-        [UniqueEmployeeAttendance]
         public DateTime Date { get; set; }
 
         public decimal ?Bonus { get; set; }

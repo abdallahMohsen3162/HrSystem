@@ -1,34 +1,33 @@
-﻿using DataLayer.Data;
+﻿using BusinessLayer.Interfaces;
+using BusinessLogic.Services;
 using DataLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+using System;
+using System.Threading.Tasks;
 
 namespace HrSystem.Controllers
 {
     public class PrivateHolidaysController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IPrivateHolidayService _privateHolidayService;
 
-        public PrivateHolidaysController(ApplicationDbContext context)
+        public PrivateHolidaysController(IPrivateHolidayService privateHolidayService)
         {
-            _context = context;
+            _privateHolidayService = privateHolidayService;
         }
-
 
         public async Task<IActionResult> Index()
         {
-            var holidays = await _context.PrivateHolidays.Include(h => h.Employee).ToListAsync();
+            var holidays = await _privateHolidayService.GetAllPrivateHolidays();
             return View(holidays);
         }
 
-
         public IActionResult Create()
         {
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "Id", "EmployeeName");
+            ViewData["EmployeeId"] = new SelectList(_privateHolidayService.GetAllEmployees().Result, "Id", "EmployeeName");
             return View();
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -36,70 +35,53 @@ namespace HrSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-
-                _context.Add(privateHoliday);
-                await _context.SaveChangesAsync();
+                await _privateHolidayService.CreatePrivateHoliday(privateHoliday);
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "Id", "EmployeeName", privateHoliday.EmployeeId);
+            ViewData["EmployeeId"] = new SelectList(await _privateHolidayService.GetAllEmployees(), "Id", "EmployeeName", privateHoliday.EmployeeId);
             return View(privateHoliday);
         }
-
 
         public async Task<IActionResult> Edit(int? id)
         {
-
-            var privateHoliday = await _context.PrivateHolidays.FindAsync(id);
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "Id", "EmployeeName", privateHoliday.EmployeeId);
+            var privateHoliday = await _privateHolidayService.GetPrivateHolidayById(id.Value);
+            ViewData["EmployeeId"] = new SelectList(await _privateHolidayService.GetAllEmployees(), "Id", "EmployeeName", privateHoliday.EmployeeId);
             return View(privateHoliday);
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,EmployeeId,HolidayDate")] PrivateHoliday privateHoliday)
         {
-
             if (ModelState.IsValid)
             {
-                _context.Update(privateHoliday);
-                await _context.SaveChangesAsync();
-
+                await _privateHolidayService.UpdatePrivateHoliday(privateHoliday);
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["EmployeeId"] = new SelectList(_context.Employee, "Id", "EmployeeName", privateHoliday.EmployeeId);
+            ViewData["EmployeeId"] = new SelectList(await _privateHolidayService.GetAllEmployees(), "Id", "EmployeeName", privateHoliday.EmployeeId);
             return View(privateHoliday);
         }
 
-
         public async Task<IActionResult> Delete(int? id)
         {
-            var privateHoliday = await _context.PrivateHolidays.FindAsync(id);
-            _context.PrivateHolidays.Remove(privateHoliday);
-            await _context.SaveChangesAsync();
+            await _privateHolidayService.DeletePrivateHoliday(id.Value);
             return RedirectToAction(nameof(Index));
         }
 
         [AcceptVerbs("Get", "Post")]
-        public IActionResult ValidateAttendanceRecord(int employeeId, DateTime holidayDate)
+        public async Task<IActionResult> ValidateAttendanceRecord(int employeeId, DateTime holidayDate)
         {
-            
-            var attendanceRecord = _context.AttendanceTables
-                .FirstOrDefault(a => a.EmployeeId == employeeId && a.Date == holidayDate);
-
-            if (attendanceRecord != null)
-            {
-                return Json(true);
-            }
-            return Json("Attendance does not exist for the specified employee and date.");
+            var result = await _privateHolidayService.ValidateAttendanceRecord(employeeId, holidayDate);
+            return result ? Json(true) : Json("Attendance does not exist for the specified employee and date.");
         }
 
-
-        private bool PrivateHolidayExists(int id)
+        [AcceptVerbs("Get", "Post")]
+        public async Task<IActionResult> ValidateHolidayDate(DateTime holidayDate, int employeeId, int? id)
         {
-            return _context.PrivateHolidays.Any(e => e.Id == id);
+            var result = await _privateHolidayService.ValidateHolidayDate(holidayDate, employeeId, id);
+            return result ? Json(true) : Json("This holiday already exists or falls on a weekly holiday.");
         }
     }
 }

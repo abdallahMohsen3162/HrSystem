@@ -24,6 +24,7 @@ namespace DataLayer.Entities
         public Employee? Employee { get; set; }
 
         [Required]
+        [Remote(action: "ValidateHolidayDate", controller: "PrivateHolidays", AdditionalFields = "EmployeeId")]
         public DateTime HolidayDate { get; set; }
 
     }    
