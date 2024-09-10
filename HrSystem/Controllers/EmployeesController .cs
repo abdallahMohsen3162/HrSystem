@@ -4,21 +4,26 @@ using BusinessLayer.Services;
 using DataLayer.ViewModels;
 using BusinessLayer.Interfaces;
 using DataLayer.Entities;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
 namespace HrSystem.Controllers
 {
     public class EmployeesController : Controller
     {
         private readonly IEmployeeService _employeeService;
-
-        public EmployeesController(IEmployeeService employeeService)
+        private readonly IDepartmentsService _departmentsService;
+        
+        public EmployeesController(IEmployeeService employeeService, IDepartmentsService departmentsService)
         {
             _employeeService = employeeService;
+            _departmentsService = departmentsService;
         }
 
         // GET: Employee
         public async Task<IActionResult> Index()
         {
             var model = await _employeeService.GetAllEmployeesAsync();
+            
             return View(model);
         }
 
@@ -45,7 +50,7 @@ namespace HrSystem.Controllers
 
             List<ListItem> nationalities = Nationalities.GetNationalities();
             ViewBag.nationalities = nationalities;
-
+            ViewBag.departments = _departmentsService.GetDepartments();
             return View();
         }
 
@@ -61,6 +66,7 @@ namespace HrSystem.Controllers
             }
             List<ListItem> nationalities = Nationalities.GetNationalities();
             ViewBag.nationalities = nationalities;
+            ViewBag.departments = _departmentsService.GetDepartments();
             return View(employee);
         }
 
@@ -91,11 +97,15 @@ namespace HrSystem.Controllers
                 JoinDate = employee.JoinDate,
                 Salary = employee.Salary,
                 AttendanceTime = employee.AttendanceTime,
-                DepartureTime = employee.DepartureTime
+                DepartureTime = employee.DepartureTime,
+                DepartmentId = employee.DepartmentId,
+                
             };
             List<ListItem> nationalities = Nationalities.GetNationalities();
             ViewBag.nationalities = nationalities;
             ViewBag.imageUrl = employee.image;
+            var departments = _departmentsService.GetDepartments();
+            ViewBag.departments = departments;
             return View(model);
         }
 
@@ -115,6 +125,7 @@ namespace HrSystem.Controllers
             }
             List<ListItem> nationalities = Nationalities.GetNationalities();
             ViewBag.nationalities = nationalities;
+            ViewBag.departments = _departmentsService.GetDepartments();
             return View(employee);
         }
 

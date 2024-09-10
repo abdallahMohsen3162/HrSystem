@@ -15,6 +15,7 @@
                     <th scope="col">@Html.DisplayNameFor(model => model.First().PhoneNumber)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.First().Gender)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.First().Nationality)</th>
+                    <th scope="col">@Html.DisplayNameFor(model => model.First().DepartmentId)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.First().DateOfBirth)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.First().JoinDate)</th>
                     <th scope="col">@Html.DisplayNameFor(model => model.First().Salary)</th>
@@ -30,6 +31,8 @@
                         <td>@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
                         <td>@Html.DisplayFor(modelItem => item.Gender)</td>
                         <td>@Html.DisplayFor(modelItem => item.Nationality)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Department.DepartmentName)</td>
+
                         <td>@item.DateOfBirth.ToShortDateString()</td>
                         <td>@item.JoinDate.ToShortDateString()</td>
                         <td>@Html.DisplayFor(modelItem => item.Salary)</td>

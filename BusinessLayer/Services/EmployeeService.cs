@@ -25,7 +25,8 @@ namespace BusinessLayer.Services
 
         public async Task<List<Employee>> GetAllEmployeesAsync()
         {
-            return await _context.Employee.ToListAsync();
+            //including department name
+            return await _context.Employee.Include(e => e.Department).ToListAsync();
         }
 
         public async Task<Employee> GetEmployeeByIdAsync(int id)
@@ -35,6 +36,7 @@ namespace BusinessLayer.Services
 
         public async Task CreateEmployeeAsync(CreateEmployeeViewModel employee)
         {
+            Console.WriteLine(employee.DepartmentId);
             string imageUrl = await _fileManager.SaveFileAsync(employee.ProfileImage, "Employees/Images");
             var emp = new Employee
             {
@@ -49,7 +51,9 @@ namespace BusinessLayer.Services
                 Salary = employee.Salary,
                 AttendanceTime = employee.AttendanceTime,
                 DepartureTime = employee.DepartureTime,
-                image = imageUrl
+                image = imageUrl,
+                DepartmentId = employee.DepartmentId,
+                
             };
 
 
@@ -69,6 +73,7 @@ namespace BusinessLayer.Services
 
         public async Task UpdateEmployeeAsync(int id, EditeEmployeeViewModel employee)
         {
+
             var employeeEntity = await _context.Employee.FindAsync(id);
             if (employeeEntity == null)
             {
@@ -96,9 +101,12 @@ namespace BusinessLayer.Services
             employeeEntity.Salary = employee.Salary;
             employeeEntity.AttendanceTime = employee.AttendanceTime;
             employeeEntity.DepartureTime = employee.DepartureTime;
+            employeeEntity.DepartmentId = employee.DepartmentId;
 
             _context.Update(employeeEntity);
             await _context.SaveChangesAsync();
+        
+
         }
 
         public async Task DeleteEmployeeAsync(int id)

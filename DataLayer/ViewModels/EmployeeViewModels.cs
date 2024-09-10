@@ -66,6 +66,10 @@ namespace DataLayer.ViewModels
         public IFormFile ProfileImage { get; set; }
 
 
+        public int ?DepartmentId { get; set; }
+
+
+
     }
 
 
@@ -121,6 +125,8 @@ namespace DataLayer.ViewModels
         public TimeSpan DepartureTime { get; set; }
         
         public IFormFile? ProfileImage { get; set; }
+        [Required]
+        public int? DepartmentId { get; set; }
     }
 
 }

@@ -53,5 +53,10 @@ namespace DataLayer.Entities
         public TimeSpan DepartureTime { get; set; }
 
         public GeneralSettings GeneralSettings { get; set; }
+
+        [ForeignKey("Department")]
+        public int? DepartmentId { get; set; }
+
+        public Department ?Department { get; set; }
     }
 }

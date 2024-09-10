@@ -37,6 +37,7 @@ builder.Services.AddScoped<IHolidayService, HolidayService>();
 builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 builder.Services.AddScoped<IPrivateHolidayService, PrivateHolidayService>();
 builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<IDepartmentsService, DepartmentsService>();
 
 
 //builder.Services.AddIdentity<IdentityUser, IdentityRole>()

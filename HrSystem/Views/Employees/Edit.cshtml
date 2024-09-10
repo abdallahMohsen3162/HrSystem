@@ -10,9 +10,11 @@
         <h2 class="content-header">Edit Employee</h2>
     </div>
 </div>
+
 <div class="row">
     <div class="col-md-12">
         <div class="card">
+
             <div class="card-header">
                 <div class="card-title-wrap bar-success">
                     <h4 class="card-title" id="horz-layout-basic">Employee Information</h4>
@@ -21,6 +23,7 @@
             </div>
             <div class="card-body">
                 <div class="px-3">
+
                     <form asp-action="Edit" method="post" class="form form-horizontal" enctype="multipart/form-data">
                         <div class="form-body">
                             <h4 class="form-section">
@@ -102,6 +105,29 @@
                                 <div class="col-md-9">
                                     <input asp-for="Salary" type="number" step="0.01" class="form-control" />
                                     <span asp-validation-for="Salary" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-3 label-control" asp-for="DepartmentId">Departmeent: <span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <select asp-for="DepartmentId" class="form-control">
+                                        <option value="">Depatment</option>
+                                        @foreach (var d in ViewBag.departments)
+                                        {
+                                            if (d.Id == Model.DepartmentId)
+                                            {
+                                                <option value="@d.Id" selected>@d.DepartmentName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@d.Id">@d.DepartmentName</option>
+                                            }
+
+                                        }
+                                        <
+                                    </select>
+                                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
                                 </div>
                             </div>
 
