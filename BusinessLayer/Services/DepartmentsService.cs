@@ -56,25 +56,34 @@ namespace BusinessLayer.Services
 
         public async Task<Department> DeleteDepartment(int id)
         {
-            var department = await _context.Departments.FindAsync(id);
-            if (department == null)
+            try
             {
-                return null;
-            }
-            var employees = await _context.Employee
-                .Where(e => e.DepartmentId == id)
-                .ToListAsync();
+                var department = await _context.Departments.FindAsync(id);
+                if (department == null)
+                {
+                    return null;
+                }
+                var employees = await _context.Employee
+                    .Where(e => e.DepartmentId == id)
+                    .ToListAsync();
 
-            foreach (var employee in employees)
+                foreach (var employee in employees)
+                {
+                    employee.DepartmentId = null;
+                    _context.Employee.Update(employee);
+                }
+                _context.SaveChanges();
+
+                _context.Departments.Remove(department);
+                       
+                await _context.SaveChangesAsync();
+                return department;
+            }
+            catch(Exception ex)
             {
-                employee.DepartmentId = null;
-                _context.Employee.Update(employee);
+                Console.WriteLine(ex.Message);
             }
-
-            _context.Departments.Remove(department);
-
-            await _context.SaveChangesAsync();
-            return department;
+            return null;
         }
 
 
