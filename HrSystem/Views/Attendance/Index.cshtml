@@ -50,7 +50,7 @@
 
 
 
-<table class="table">
+<table class="table table-striped table-bordered zero-configuration">
     <thead>
         <tr>
             <th>Employee Name</th>
@@ -58,12 +58,12 @@
             <th>Attendance Time</th>
             <th>Departure Time</th>
             <th>Date</th>
-            <th>Discount(hours)</th>
-            <th>Bonus(hours)</th>
+            <th>Discount (hours)</th>
+            <th>Bonus (hours)</th>
             <th>Employee Attendance Time</th>
             <th>Employee Departure Time</th>
-            <th>Permession</th>
-            <th></th>
+            <th>Permission</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -81,15 +81,18 @@
                 <td>@item.Employee.DepartureTime</td>
                 <td>@item.EarlyTime</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@item.Id" data-name="@item.Employee.EmployeeName">
-                        Delete
-                    </button>
+                    <div class="btn-group" role="group">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
+                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@item.Id" data-name="@item.Employee.EmployeeName">
+                            Delete
+                        </button>
+                    </div>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
 
 
 @section Scripts {

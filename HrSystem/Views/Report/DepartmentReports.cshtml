@@ -1,0 +1,108 @@
+﻿@model Dictionary<string, List<DataLayer.ViewModels.EmployeeMonthlyReportViewModel>>
+
+@{
+    ViewData["Title"] = "Department Reports";
+}
+
+<h1>Department Reports</h1>
+
+<div class="row mb-3">
+    <div class="col-12">
+        <form asp-action="DepartmentReports" method="get">
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="month">Month</label>
+                    <select id="month" name="month" class="form-control">
+                        @for (int i = 1; i <= 12; i++)
+                        {
+                            @if (i == ViewBag.Month)
+                            {
+                                <option value="@i" selected>@i</option>
+                            }
+                            else
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+
+                <div class="form-group col-md-3">
+                    <label for="year">Year</label>
+
+                    <select id="year" name="year" class="form-control">
+                        @for (int i = DateTime.Now.Year; i >= 2000; i--)
+                        {
+                            @if (i == ViewBag.Year)
+                            {
+                                <option value="@i" selected>@i</option>
+                            }
+                            else
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="departmentId">Department</label>
+                    <select id="departmentId" name="departmentId" class="form-control">
+                        <option value="-1">All Departments</option>
+                        @if (ViewBag.Departments != null)
+                        {
+                            @foreach (var department in ViewBag.Departments)
+                            {
+                                @if (department.Id == ViewBag.DepartmentId)
+                                {
+                                    <option value="@department.Id" selected>@department.DepartmentName</option>
+                                }
+                                else
+                                {
+                                    <option value="@department.Id">@department.DepartmentName</option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Department</th>
+                    <th>Employee</th>
+                    <th>Salary</th>
+                    <th>Total Salary with Department</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var department in Model)
+                {
+                    <tr>
+                        <td rowspan="@(department.Value.Count + 1)">@department.Key</td>
+                        <td colspan="2"></td>
+                        <td rowspan="@(department.Value.Count + 1)">@department.Value.Sum(x => x.NetSalary).ToString("C2")</td>
+                    </tr>
+                    @foreach (var employee in department.Value)
+                    {
+                        <tr>
+                            <td>@employee.EmployeeName</td>
+                            <td>@employee.NetSalary.ToString("C2")</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

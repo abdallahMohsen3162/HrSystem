@@ -62,6 +62,29 @@
                             </div>
                         </div>
 
+
+                        <div class="col-sm-12 col-md-3">
+                            <div class="dataTables_length">
+                                <label>
+                                    Department
+                                    <select name="departmentId" class="form-control form-control-sm">
+                                        <option value="">All</option>
+                                        @foreach (var department in ViewBag.departments)
+                                        {
+                                            if (ViewBag.departmentName == department.DepartmentName)
+                                            {
+                                                <option selected value="@department.Id">
+                                                    @department.DepartmentName
+                                                </option>
+                                            }
+                                            {
+                                                <option value="@department.Id">@department.DepartmentName</option>
+                                            }
+                                        }
+                                    </select>
+                                </label>
+                            </div>
+
                         <div class="col-lg-3">
                             <button type="submit" id="searchButton" class="btn btn-primary mb-2">
                                 <i class="ft-search"></i>&nbsp;

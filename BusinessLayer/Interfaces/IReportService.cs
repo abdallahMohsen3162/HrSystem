@@ -9,7 +9,8 @@ namespace BusinessLayer.Interfaces
 {
     public interface IReportService
     {
-        Task<List<EmployeeMonthlyReportViewModel>> GenerateMultiReportAsync(int month, int year);
+        Task<List<EmployeeMonthlyReportViewModel>> GenerateMultiReportAsync(int month, int year, int departmentId);
+        Dictionary<string, List<EmployeeMonthlyReportViewModel>> GenerateDepartmentReport(int month, int year, int departmentId = -1);
         Task<EmployeeMonthlyReportViewModel> GenerateEmployeeMonthlyReportAsync(int month, int year, int employeeId);
     }
 }

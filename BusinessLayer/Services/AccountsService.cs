@@ -177,5 +177,9 @@ namespace BusinessLayer.Services
                 return SignInResult.Failed;
             }
         }
+        public async Task Signout()
+        {
+            await _signInManager.SignOutAsync();
+        }
     }
 }

@@ -54,37 +54,45 @@ namespace BusinessLayer.Services
             return existingDepartment;
         }
 
-        public async Task<Department> DeleteDepartment(int id)
+        public Department DeleteDepartment(int id)
         {
             try
             {
-                var department = await _context.Departments.FindAsync(id);
+                var department =  _context.Departments.Find(id);
+
                 if (department == null)
                 {
+                    Console.WriteLine("Department not found");
                     return null;
                 }
-                var employees = await _context.Employee
+
+                Console.WriteLine(department.DepartmentName);
+
+                var employees =  _context.Employee
                     .Where(e => e.DepartmentId == id)
-                    .ToListAsync();
+                    .ToList();
 
                 foreach (var employee in employees)
                 {
                     employee.DepartmentId = null;
                     _context.Employee.Update(employee);
                 }
-                _context.SaveChanges();
+
+                 _context.SaveChanges(); 
 
                 _context.Departments.Remove(department);
-                       
-                await _context.SaveChangesAsync();
+
+                 _context.SaveChanges(); 
+
                 return department;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return null;
             }
-            return null;
         }
+
 
 
         public async Task<Department> GetDepartmentByName(string name)

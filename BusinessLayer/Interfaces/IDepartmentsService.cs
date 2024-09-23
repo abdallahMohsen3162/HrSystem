@@ -17,7 +17,7 @@ namespace BusinessLayer.Interfaces
 
         Task<Department> UpdateDepartment(Department department);
 
-        Task<Department> DeleteDepartment(int id);
+        Department DeleteDepartment(int id);
 
         Task<Department> GetDepartmentByName(string name);
 

@@ -13,5 +13,10 @@ namespace HrSystem.Controllers
         {
             return View();
         }
+
+        public IActionResult NowAllowd()
+        {
+            return View();
+        }
     }
 }

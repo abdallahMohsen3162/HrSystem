@@ -1,103 +1,66 @@
 ﻿@model DataLayer.ViewModels.EmployeeMonthlyReportViewModel
-
 @{
     ViewBag.Title = "Employee Monthly Report";
     var employees = ViewData["Employees"] as SelectList;
 }
 
-<div class="container d-flex justify-content-between">
-    <h2>Employee Monthly Report </h2>
-    <a class="btn btn-primary" asp-action="MultiReport">All Reports</a>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Employee Monthly Report</h2>
+        <a class="btn btn-primary" asp-action="MultiReport">All Reports</a>
+    </div>
+
+    @* form *@
+    @await Component.InvokeAsync("ReportSearch")
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <table class="table table-striped table-hover">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Description</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Basic Salary</td>
+                        <td>@Model.BasicSalary.ToString("C")</td>
+                    </tr>
+                    <tr>
+                        <td>Hour Price</td>
+                        <td>@Model.HourPrice?.ToString("C2")</td>
+                    </tr>
+                    <tr>
+                        <td>Attended Days</td>
+                        <td>@Model.AttendedDays</td>
+                    </tr>
+                    <tr>
+                        <td>Absent Days</td>
+                        <td>@Model.AbsentDays</td>
+                    </tr>
+                    <tr>
+                        <td>Total Bonuses (Hours)</td>
+                        <td>@Model.BonusesByHours</td>
+                    </tr>
+                    <tr>
+                        <td>Total Bonuses (Money)</td>
+                        <td>@Model.BonusesByMoney.ToString("C")</td>
+                    </tr>
+                    <tr>
+                        <td>Total Deductions (Hours)</td>
+                        <td>@Model.DeductionsByHours</td>
+                    </tr>
+                    <tr>
+                        <td>Total Deductions (Money)</td>
+                        <td>@Model.DeductionsByMoney.ToString("C")</td>
+                    </tr>
+                    <tr class="table-primary">
+                        <td><strong>Net Salary</strong></td>
+                        <td><strong>@Model.NetSalary.ToString("C2")</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-
-@await Component.InvokeAsync("ReportSearch")
-
-<br />
-<br />
-<br />
-<div>
-
-    <table border="1" cellpadding="5" cellspacing="0" style="width: 100%; border-collapse: collapse;">
-        <thead>
-            <tr>
-                <th>Description</th>
-                <th>Amount</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Basic Salary</td>
-                <td>@Model.BasicSalary.ToString("C")</td>
-            </tr>
-            <tr>
-                <td>Hour Price</td>
-                <td>@Model.HourPrice?.ToString("C2")</td>
-            </tr>
-            <tr>
-                <td>Attended Days</td>
-                <td>@Model.AttendedDays</td>
-            </tr>
-            <tr>
-                <td>Absent Days</td>
-                <td>@Model.AbsentDays</td>
-            </tr>
-            <tr>
-                <td>Total Bonuses (Hours)</td>
-                <td>@Model.BonusesByHours</td>
-            </tr>
-            <tr>
-                <td>Total Bonuses (Money)</td>
-                <td>@Model.BonusesByMoney.ToString("C")</td>
-            </tr>
-            <tr>
-                <td>Total Deductions (Hours)</td>
-                <td>@Model.DeductionsByHours</td>
-            </tr>
-            <tr>
-                <td>Total Deductions (Money)</td>
-                <td>@Model.DeductionsByMoney.ToString("C")</td>
-            </tr>
-            <tr>
-                <td><strong>Net Salary</strong></td>
-                <td><strong>@Model.NetSalary.ToString("C2")</strong></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-
-<h3>Daily Attendance Details</h3>
-@if (Model.DailyDetails != null)
-{
-   
-
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Holiday</th>
-                <th>Weekly Holiday</th>
-                <th>Attended</th>
-                <th>Arrival Time</th>
-                <th>Departure Time</th>
-                <th>Bonus</th>
-                <th>Deduction</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var detail in Model.DailyDetails)
-            {
-                <tr>
-                    <td>@detail.Date.ToString("yyyy-MM-dd")</td>
-                    <td>@(detail.IsHoliday ? "Yes" : "")</td>
-                    <td>@(detail.IsWeeklyHoliday ? "Yes" : "")</td>
-                    <td>@(detail.Attended ? "Yes" : "No")</td>
-                    <td>@(detail.ArrivalTime.HasValue ? detail.ArrivalTime.Value.ToString(@"hh\:mm") : "-")</td>
-                    <td>@(detail.DepartureTime.HasValue ? detail.DepartureTime.Value.ToString(@"hh\:mm") : "-")</td>
-                    <td>@detail.Bonus</td>
-                    <td>@detail.Deduction</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}

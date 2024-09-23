@@ -49,20 +49,15 @@
 
 
 
-
-<table class="table">
+<table class="table table-striped table-bordered zero-configuration">
     <thead>
         <tr>
             <th>Employee Name</th>
             <th>Attendance Time</th>
+            <th>Departure Time</th>
             <th>Date</th>
-           <th>Departure Time</th>
-            @*         <th>Discount(hours)</th>
-            <th>Bonus(hours)</th>
-            <th>Employee Attendance Time</th>
-            <th>Employee Departure Time</th> *@
-            <th>Permession</th>
-            <th></th>
+            <th>Permission</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -73,13 +68,9 @@
                 <td>@item.AttendanceTime</td>
                 <td>@item.DepartureTime</td>
                 <td>@item.Date.ToShortDateString()</td>
-@*                 <td>@item.Discount</td>
-                <td>@item.Bonus</td>
-                <td>@item.Employee.AttendanceTime</td>
-                <td>@item.Employee.DepartureTime</td> *@
                 <td>@item.EarlyTime</td>
                 <td>
-                    <a asp-action="EditPermissions" asp-route-id="@item.Id" class="btn btn-warning">Edit Permession</a>
+                    <a asp-action="EditPermissions" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit Permission</a>
                 </td>
             </tr>
         }

@@ -59,14 +59,14 @@
     <h2>Employee General Settings</h2>
 
 
-    <table class="table">
+    <table class="table table-striped table-bordered zero-configuration">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Employee Name</th>
                 <th>Image</th>
-                <th>Bonus</th>
-                <th>Discount</th>
+                <th>Bonus (per hour)</th>
+                <th>Discount (per hour)</th>
                 <th>Weekly Holidays</th>
                 <th>Edit</th>
             </tr>
@@ -93,7 +93,7 @@
                     <td>
                         @if (!Model.EmployeesWithoutSettings.Any(e => e.Id == item.EmployeeId))
                         {
-                            <a asp-action="Edit" asp-controller="GeneralSettings" asp-route-id="@item.EmployeeId" class="btn btn-warning">Edit Settings</a>
+                            <a asp-action="Edit" asp-controller="GeneralSettings" asp-route-id="@item.EmployeeId" class="btn btn-sm btn-warning">Edit Settings</a>
                         }
                     </td>
                 </tr>

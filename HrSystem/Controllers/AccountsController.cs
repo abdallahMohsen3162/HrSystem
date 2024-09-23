@@ -157,5 +157,12 @@ namespace HrSystem.Controllers
             return View("Login", model);
         }
 
+
+        public async Task<IActionResult> Logout()
+        {
+            this._userService.Signout();
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }

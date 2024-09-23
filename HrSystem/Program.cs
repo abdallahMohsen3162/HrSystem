@@ -7,6 +7,7 @@ using BusinessLayer.Services;
 using DataLayer.Entities;
 using BusinessLogic.Services;
 using HrSystem.Services;
+using DataLayer.Settings;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +30,12 @@ object value = builder.Services.AddControllersWithViews().AddRazorRuntimeCompila
         option.HtmlHelperOptions.ClientValidationEnabled = true;
     });
 
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+//HrSystem
+//cusp qlek xkjx hvdn
+
+
 builder.Services.AddScoped<IRolesService, RolesService>();
 builder.Services.AddScoped<IAccountsService, AccountsService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
@@ -38,7 +45,7 @@ builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 builder.Services.AddScoped<IPrivateHolidayService, PrivateHolidayService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IDepartmentsService, DepartmentsService>();
-
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 //builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 //    .AddEntityFrameworkStores<ApplicationDbContext>()

@@ -16,13 +16,13 @@
 <p>
     <a href="@Url.Action("Create")" class="btn btn-primary">Create New Holiday</a>
 </p>
-<table class="table">
+<table class="table table-striped table-bordered zero-configuration">
     <thead>
         <tr>
             <th>Name</th>
             <th>Date</th>
             <th>Day</th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -33,15 +33,18 @@
                 <td>@item.Date.ToString("yyyy-MM-dd")</td>
                 <td>@days[i++]</td>
                 <td>
-                    <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-warning">Edit</a> |
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@item.Id" data-name="@item.Name">
-                        Delete
-                    </button>
+                    <div class="btn-group" role="group">
+                        <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-sm btn-warning">Edit</a>
+                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="@item.Id" data-name="@item.Name">
+                            Delete
+                        </button>
+                    </div>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
 
 
 

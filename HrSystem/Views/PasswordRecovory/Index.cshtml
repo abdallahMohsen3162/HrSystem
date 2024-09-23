@@ -1,0 +1,23 @@
+﻿@model DataLayer.ViewModels.SendPasswordResetLinkViewModel;
+
+@{
+    ViewData["Title"] = "Send Password Reset Link";
+}
+
+<h2>Send Password Reset Link</h2>
+
+<form asp-action="SendPasswordResetLink" method="post">
+    <div class="form-group">
+        <label asp-for="Email" class="control-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Send Reset Link</button>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

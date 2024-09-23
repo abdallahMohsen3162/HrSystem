@@ -19,7 +19,9 @@ namespace HrSystem.ViewComponents
         {
             var employees = _context.Employee.ToList();
 
+            var departments = _context.Departments.ToList();
 
+            ViewData["Departments"] = new SelectList(departments, "Id", "DepartmentName");
             ViewData["Employees"] = new SelectList(employees, "Id", "EmployeeName");
 
             return View();

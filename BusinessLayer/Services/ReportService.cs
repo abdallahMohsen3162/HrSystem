@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BusinessLayer.Interfaces;
+using NuGet.Packaging;
+using Humanizer;
 
 namespace HrSystem.Services
 {
@@ -19,9 +21,13 @@ namespace HrSystem.Services
             _context = context;
         }
 
-        public async Task<List<EmployeeMonthlyReportViewModel>> GenerateMultiReportAsync(int month, int year)
+        public async Task<List<EmployeeMonthlyReportViewModel>> GenerateMultiReportAsync(int month, int year, int departmentId)
         {
+
+
+
             var employees = await _context.Employee
+                .Where(e => e.DepartmentId == departmentId || departmentId == -1)
                 .Include(e => e.GeneralSettings)
                 .ToListAsync();
 
@@ -34,7 +40,9 @@ namespace HrSystem.Services
 
             foreach (var employee in employees)
             {
-                var report = GenerateEmployeeMonthlyReport(employee, month, year, holidays);
+                Employee emp = employee;
+                
+                var report = GenerateEmployeeMonthlyReport(emp, month, year, holidays);
                 if (report != null)
                 {
                     monthlyReports.Add(report);
@@ -63,10 +71,50 @@ namespace HrSystem.Services
             return GenerateEmployeeMonthlyReport(employee, month, year, holidays);
         }
 
+
+        public Dictionary<string, List<EmployeeMonthlyReportViewModel>> GenerateDepartmentReport(int month, int year, int departmentId = -1)
+        {
+            var employees = _context.Employee.Include(e => e.Department).Include(e => e.GeneralSettings)
+                .Where(e => e.DepartmentId == departmentId || departmentId == -1)
+                .ToList();
+
+            Dictionary<string, List<EmployeeMonthlyReportViewModel>> mp = new Dictionary<string, List<EmployeeMonthlyReportViewModel>>();
+            var holidays = _context.Holidays
+                .Where(h => h.Date.Month == month && h.Date.Year == year)
+                .Select(h => h.Date)
+                .ToList();
+
+            foreach (var employee in employees)
+            {
+                if (employee.Department != null)
+                {
+
+                    var report = GenerateEmployeeMonthlyReport(employee, month, year, holidays);
+
+                    if (report != null)
+                    {
+
+                        var departmentName = employee.Department.DepartmentName;
+
+                        if (!mp.ContainsKey(departmentName))
+                        {
+                            mp[departmentName] = new List<EmployeeMonthlyReportViewModel>();
+                        }
+                        mp[departmentName].Add(report);
+
+                    }
+                }
+            }
+            return mp;
+        }
+
+
         private EmployeeMonthlyReportViewModel GenerateEmployeeMonthlyReport(Employee employee, int month, int year, List<DateTime> holidays)
         {
+
             try
             {
+
                 var startDate = new DateTime(year, month, 1);
                 var endDate = startDate.AddMonths(1).AddDays(-1);
 
@@ -79,6 +127,7 @@ namespace HrSystem.Services
                 {
                     endDate = DateTime.Now;
                 }
+
 
                 if (startDate < employee.JoinDate && employee.JoinDate < endDate)
                 {
@@ -132,14 +181,15 @@ namespace HrSystem.Services
                     .ToHashSet();
 
                 int attendedDays = attendanceRecords
-                    .Where(a => !weeklyHolidayInts.Contains((int)a.Date.DayOfWeek) && !privateHolidays.Contains(a.Date.Date))
+                    .Where(a => !weeklyHolidayInts.Contains((int)a.Date.DayOfWeek) && !privateHolidays.Contains(a.Date.Date) && !holidays.Contains(a.Date.Date))
                     .Count();
 
-                int totalWorkingDays = Enumerable.Range(0, (endDate - startDate).Days)
+                int totalWorkingDays = Enumerable.Range(0, (endDate - startDate).Days + 1)
                     .Select(d => startDate.AddDays(d))
-                    .Count(date => !weeklyHolidayInts.Contains((int)date.DayOfWeek) && !privateHolidays.Contains(date.Date));
+                    .Count(date => !weeklyHolidayInts.Contains((int)date.DayOfWeek) && !privateHolidays.Contains(date.Date) && !holidays.Contains(date.Date));
 
                 int absentDays = totalWorkingDays - attendedDays;
+
                 decimal priceofabsentDays = HourPrice * absentDays * (decimal)(employee.DepartureTime - employee.AttendanceTime).TotalHours;
 
                 decimal totalDiscountsMoney = priceofabsentDays + DiscountHours * HourPrice * EmployeediscountHour;
@@ -162,8 +212,9 @@ namespace HrSystem.Services
                     HourPrice = HourPrice,
                 };
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return new EmployeeMonthlyReportViewModel
                 {
                     EmployeeName = employee.EmployeeName,
@@ -179,5 +230,11 @@ namespace HrSystem.Services
                 };
             }
         }
+
+
+
     }
+ 
+
+
 }

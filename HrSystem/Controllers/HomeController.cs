@@ -7,6 +7,7 @@ using DataLayer.Data;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using BusinessLayer.Interfaces;
 
 
 namespace HrSystem.Controllers
@@ -15,18 +16,22 @@ namespace HrSystem.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+        private readonly IEmailSender emailSender;
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IEmailSender emailSender)
         {
             _logger = logger;
             _context = context;
+            this.emailSender = emailSender;
 
         }
+        
+
 
 
 
         public IActionResult Index()
         {
-
+            var result = emailSender.SendEmailAsync("abdallah3162@outlook.com", "subject", "body");
             return View();
         }
 

@@ -21,5 +21,6 @@ namespace BusinessLayer.Interfaces
         Task<IdentityResult> UpdateUserAsync(ApplicationUser user, string newPassword);
         Task<ApplicationUser> FindUserByName(string name);
         Task<SignInResult> Signin(LoginViewModel model);
+        Task Signout();
     }
 }
