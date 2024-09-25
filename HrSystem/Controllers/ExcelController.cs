@@ -174,6 +174,7 @@ namespace HrSystem.Controllers
                 Console.WriteLine("Invalid file format. Only .xlsx files are allowed.");
                 return RedirectToAction("NowAllowd", "Errors");
             }
+
             List<AttendanceSheet> lst = new List<AttendanceSheet>();
 
             FileManager fileManager = new FileManager("wwwroot");
@@ -182,130 +183,99 @@ namespace HrSystem.Controllers
             string filePath = Path.Combine("wwwroot", relativeFilePath);
             Console.WriteLine($"File saved at: {filePath}");
 
-
             if (!System.IO.File.Exists(filePath))
             {
                 Console.WriteLine("File does not exist after upload.");
                 return RedirectToAction("NowAllowd", "Errors");
             }
+
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             FileInfo fileInfo = new FileInfo(filePath);
-            using (var package = new ExcelPackage(fileInfo))
+            DateTime historyDate;
+            using (ExcelPackage package = new ExcelPackage(fileInfo))
             {
+              
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
 
-                int rowCount = worksheet.Dimension?.Rows ?? 0;
-                int colCount = worksheet.Dimension?.Columns ?? 0;
 
-                if (rowCount == 0 || colCount == 0)
+                string dateString = worksheet.Cells["C1"].Text;
+                DateTime date;
+                if (!DateTime.TryParse(dateString, out date))
                 {
-                    Console.WriteLine("empty");
-                    return RedirectToAction("NowAllowd", "Errors");
+                    Console.WriteLine("Date format is incorrect or missing.");
+                    return RedirectToAction("NotAllowed", "Errors");
                 }
-                Dictionary<int, string> NameOfColumn = new Dictionary<int, string>();
-                Dictionary<int, string> table = new Dictionary<int, string>();
-                for (int col = 1; col <= colCount; col++)
-                {
-                    var cellValue = worksheet.Cells[2, col].Text;
-                    NameOfColumn.Add(col, cellValue);
-                }
-
-                var historyCell = worksheet.Cells[1, 3]; 
-                var historyText = historyCell.Text; 
-
-                Console.WriteLine($"History: {historyText}");
-
-                DateTime historyDate; 
-                bool isHistoryValid = DateTime.TryParseExact(historyText, "d-M-yyyy", null, System.Globalization.DateTimeStyles.None, out historyDate);
-
-                
-                
-                
-
-                for (int row = 3; row <= rowCount; row++)
+                historyDate = date;
+                int startRow = 3;
+                int rowCount = worksheet.Dimension.Rows;
+                var employees = _context.Employee.ToList();
+                for (int row = startRow; row <= rowCount; row++)
                 {
                     try
                     {
-                        var id = worksheet.Cells[row, 1].Text;
-                        var empId = worksheet.Cells[row, 2].Text;
-                        var attendanceTimeStr = worksheet.Cells[row, 3].Text;
-                        var depTimeStr = worksheet.Cells[row, 4].Text;
-                        DateTime attendanceTime;
-                        DateTime depTime;
+        
+                        var no = worksheet.Cells[row, 1].Text; 
+                        var employeeId = worksheet.Cells[row, 2].Text; 
+                        var attendanceTimeStr = worksheet.Cells[row, 3].Text; 
+                        var departureTimeStr = worksheet.Cells[row, 4].Text; 
+                        var emp = employees.FirstOrDefault(x => x.Id == int.Parse(employeeId));
 
+                        TimeSpan attendanceTime = DateTime.Parse(attendanceTimeStr).TimeOfDay;
+                        TimeSpan departureTime = DateTime.Parse(departureTimeStr).TimeOfDay;
 
-                        bool isAttendanceTimeValid = DateTime.TryParse(attendanceTimeStr, out attendanceTime);
-                        bool isDepTimeValid = DateTime.TryParse(depTimeStr, out depTime);
-                        Console.WriteLine($"Attendance Time Valid: {isAttendanceTimeValid}, Departure Time Valid: {isDepTimeValid}");
-                        if (id == null) continue;
-
-                        Employee employee = _context.Find<Employee>(int.Parse(empId));
+                        string val = "valid";
+                        if (emp == null)
+                        {
+                            val = "no data";
+                        }
+                        Console.WriteLine(historyDate.Day);
+                        Console.WriteLine(historyDate.Month);
+                        Console.WriteLine(historyDate.Year);
+                        Console.WriteLine("############");
+                        if (_context.AttendanceTables.Any(x => x.EmployeeId == int.Parse(employeeId) && x.Date.Year == date.Year && x.Date.Month == date.Month && x.Date.Day == date.Day) == true)
+                        {
+                            val = "Exists before";
+                        }
 
                         lst.Add(new AttendanceSheet
                         {
-                            Id = id != null ? int.Parse(id) : 0,
-                            EmployeeId = empId != null ? int.Parse(empId) : 0,
-                            EmployeeName = (employee != null) ? employee.EmployeeName : "No Name",
-                            In = new TimeSpan(attendanceTime.Hour, attendanceTime.Minute, 0),
-                            Out = new TimeSpan(depTime.Hour, depTime.Minute, 0),
-                            History = historyDate,
-                            valid = (isAttendanceTimeValid && isDepTimeValid && historyDate.Year == attendanceTime.Year && historyDate.Month == attendanceTime.Month && employee != null)
+                            Id = int.Parse(no),
+                            EmployeeId = int.Parse(employeeId),
+                            EmployeeName = emp?.EmployeeName ,
+                            In = attendanceTime,
+                            Out = departureTime,
+                            History = date,
+                            valid = val
+                           
                         });
-                    }catch(Exception ex)
+
+
+
+                    }
+                    catch (Exception ex)
                     {
-                        Console.WriteLine(ex.Message);
+                        Console.WriteLine($"Error processing row {row - 1}: {ex.Message}");
                     }
                 }
-
             }
 
-           return View(lst);
+
+            ViewBag.historyDate = historyDate;
+            return View(lst);
         }
 
 
         [HttpPost]
         public async Task<IActionResult> SaveAttendances(List<AttendanceSheet> AttendanceSheets, List<int> selectedRecords)
         {
-            if (selectedRecords == null || !selectedRecords.Any())
-            {
-                Console.WriteLine("No records selected.");
-                return RedirectToAction("NoRecordsSelected", "Errors");
-            }
-            /*
-              public class AttendanceTable
-    {
-        [Key]
-        public int Id { get; set; }
+            
 
-        [Required]
-        [ForeignKey("Employee")]
-        
-        public int EmployeeId { get; set; }
-
-        public Employee? Employee { get; set; }
-
-        [Required]
-        [TimeRangeValidation]
-        
-        public TimeSpan AttendanceTime { get; set; }
-        [Required]
-        public TimeSpan? DepartureTime { get; set; }
-
-        [Required]
-        public DateTime Date { get; set; }
-
-        public decimal ?Bonus { get; set; }
-        public decimal ?Discount { get; set; }
-        [Range(0,8)]
-        public decimal ?EarlyTime { get; set; }
- 
-             
-             * */
+            int affectedRows = 0;
 
             foreach (var emp in AttendanceSheets)
             {
-                if (selectedRecords.Contains((int)emp.Id) && emp.valid)
+                if (selectedRecords.Contains((int)emp.Id))
                 {
                     _attendanceService.CreateAttendance(
                         new AttendanceTable
@@ -314,16 +284,24 @@ namespace HrSystem.Controllers
                             AttendanceTime = (TimeSpan)emp.In,
                             DepartureTime = emp.Out,
                             Date = emp.History,
-
-
                         }
-                     );
+                    );
+                    affectedRows++; 
                 }
             }
 
-            return View(nameof(UploadExcel));
+
+            TempData["AffectedRows"] = affectedRows;
+
+            return RedirectToAction(nameof(Feedback)); 
         }
 
+
+        public IActionResult Feedback()
+        {
+            ViewBag.AffectedRows = TempData["AffectedRows"] ?? 0;
+            return View();
+        }
 
 
 

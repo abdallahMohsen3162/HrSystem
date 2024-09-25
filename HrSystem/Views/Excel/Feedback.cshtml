@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Feedback";
+    int affectedRows = (int)ViewBag.AffectedRows;
+}
+
+<div class="alert alert-success" role="alert">
+    @if (affectedRows > 0)
+    {
+        
+    }
+    else
+    {
+        <strong>No records were affected.</strong> 
+    }
+</div>
+
+<a href="@Url.Action("Index")" class="btn btn-primary">Back to Upload</a>

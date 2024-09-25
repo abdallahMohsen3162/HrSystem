@@ -1,7 +1,10 @@
 ﻿@model List<DataLayer.ViewModels.AttendanceSheet>
 
 <div class="excel-style-container">
-    <h2>Attendance Records</h2>
+    <div class="d-flex justify-content-between">
+        <h2>Attendance Records</h2>
+        <h2>@ViewBag.historyDate.ToString("yyyy-MM-dd")</h2>
+    </div>
 
     @if (Model != null && Model.Any())
     {
@@ -26,16 +29,22 @@
                     }
                     @foreach (var record in Model)
                     {
-                        <tr class="@(record.valid ? "" : "invalid-record")">
+                        <tr class="@(record.valid == "valid" ? "" : "invalid-record")">
                             <td>
-                                <input type="checkbox" name="selectedRecords" value="@record.Id" />
+                               @if(record.valid == "valid"){
+
+                                     <input type="checkbox" name="selectedRecords" value="@record.Id" />
+                                }else{
+                                    <input type="checkbox" name="selectedRecords" value="@record.Id" disabled />
+                                }
+
                             </td>
                             <td>@record.Id</td>
                             <td>@record.EmployeeId</td>
                             <td>@record.EmployeeName</td>
                             <td>@record.In?.ToString(@"hh\:mm")</td>
                             <td>@record.Out?.ToString(@"hh\:mm")</td>
-                            <td>@(record.valid ? "Yes" : "No")</td>
+                            <td>@record.valid</td>
                             <input type="hidden" name="AttendanceSheets[@index].Id" value="@record.Id" />
                             <input type="hidden" name="AttendanceSheets[@index].EmployeeId" value="@record.EmployeeId" />
                             <input type="hidden" name="AttendanceSheets[@index].EmployeeName" value="@record.EmployeeName" />
@@ -85,9 +94,10 @@
 
 <script>
     function toggleSelectAll(source) {
-        const checkboxes = document.querySelectorAll('input[name="selectedRecords"]');
+        const checkboxes = document.querySelectorAll('input[name="selectedRecords"]:not([disabled])');
         checkboxes.forEach(checkbox => {
             checkbox.checked = source.checked;
         });
     }
+
 </script>

@@ -13,7 +13,7 @@ namespace DataLayer.ViewModels
         public int ?EmployeeId { get; set; }
         public TimeSpan ?In { get; set; }
         public TimeSpan ?Out { get; set; }
-        public bool valid { get; set; }
+        public string valid { get; set; }
         public DateTime History { get; set; } 
 
     }
