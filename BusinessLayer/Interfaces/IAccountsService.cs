@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Claims;
+
 
 namespace BusinessLayer.Interfaces
 {
@@ -22,5 +24,8 @@ namespace BusinessLayer.Interfaces
         Task<ApplicationUser> FindUserByName(string name);
         Task<SignInResult> Signin(LoginViewModel model);
         Task Signout();
+
+        Task<ApplicationUser> getUserData(ClaimsPrincipal User);
+        Task<IdentityResult> ResetPasswordAsync(ResetUserPasswordViewModel model);
     }
 }

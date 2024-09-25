@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Interfaces;
 using BusinessLayer.Services;
 using DataLayer.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
@@ -163,6 +164,77 @@ namespace HrSystem.Controllers
             this._userService.Signout();
             return RedirectToAction("Index", "Home");
         }
+
+
+        public async Task<IActionResult> UserProfile()
+        {
+            var user = await _userService.getUserData(User); 
+            return View(user); 
+        }
+
+        public async Task<IActionResult> ResetPassword()
+        {
+            var currentUser = await _userService.getUserData(User);
+
+            if (currentUser == null)
+            {
+                return NotFound("User not found");
+            }
+
+            var model = new ResetUserPasswordViewModel
+            {
+                UserId = currentUser.Id 
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetUserPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var currentUser = await _userService.getUserData(User);
+
+            if (currentUser == null)
+            {
+                return NotFound("User not found");
+            }
+
+            if (model.NewPassword != model.ConfirmNewPassword)
+            {
+                ModelState.AddModelError(string.Empty, "New password and confirmation do not match.");
+                return View(model);
+            }
+
+            var result = await _userService.ResetPasswordAsync(new ResetUserPasswordViewModel
+            {
+                UserId = currentUser.Id,
+                OldPassword = model.OldPassword,
+                NewPassword = model.NewPassword
+            });
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index");
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+                Console.WriteLine(error.Description);
+            }
+
+            return View(model);
+        }
+
+
+
+
 
     }
 }

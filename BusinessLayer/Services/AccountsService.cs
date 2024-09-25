@@ -7,6 +7,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
+using System.Web.Mvc;
+using System.Security.Claims;
+
 namespace BusinessLayer.Services
 {
     public class AccountsService : IAccountsService
@@ -181,5 +184,25 @@ namespace BusinessLayer.Services
         {
             await _signInManager.SignOutAsync();
         }
+
+        
+        public async Task<ApplicationUser> getUserData(ClaimsPrincipal User)
+        {
+            return await _userManager.GetUserAsync(User);
+        }
+
+        public async Task<IdentityResult> ResetPasswordAsync(ResetUserPasswordViewModel model)
+        {
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            if (user == null)
+            {
+                return IdentityResult.Failed(new IdentityError { Description = "User not found" });
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+
+            return result;
+        }
+
     }
 }

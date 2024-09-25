@@ -94,6 +94,7 @@
 </table>
 
 
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
 
 @section Scripts {
     <script type="text/javascript">
@@ -107,6 +108,19 @@
 
             var deleteButton = deleteModal.querySelector('#deleteButton');
             deleteButton.href = '@Url.Action("Delete", "Attendance")/' + id;
+        });
+
+        $(document).ready(function () {
+            $('.table').DataTable({
+                "order": [[4, "desc"]], 
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true
+            });
         });
     </script>
 }

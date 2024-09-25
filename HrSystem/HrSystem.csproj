@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Accounts\ResetPassword.cshtml" />
     <Content Remove="Views\Report\departmentReports.cshtml" />
   </ItemGroup>
 
@@ -34,7 +35,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Employees\Images\" />
-    <Folder Include="wwwroot\excel\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,11 +42,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Accounts\ResetPassword.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Report\departmentReports.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Accounts\ResetPassword.cshtml" />
     <None Include="Views\Report\DepartmentReports.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Accounts\ResetPassword.cshtml" />
   </ItemGroup>
 
 </Project>

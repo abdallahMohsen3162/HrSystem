@@ -29,8 +29,20 @@
                 <li class="nav-item">
                     <a asp-action="Index" asp-controller="GeneralSettings"><i class="icon-pie-chart"></i><span data-i18n="" class="menu-title">General Settings</span></a>
                 </li>
-                <li class="nav-item">
-                    <a asp-action="Index" asp-controller="Attendance"><i class="icon-support"></i><span data-i18n="" class="menu-title">Attendance</span></a>
+
+
+
+                <li class="has-sub nav-item">
+                    <a href="#"><i class="icon-support"></i><span data-i18n="" class="menu-title">Attendence</span></a>
+                    <ul class="menu-content">
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="Attendance"><i class="icon-support"></i><span data-i18n="" class="menu-title">Attendance</span></a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="Excel"><i class="icon-support"></i><span data-i18n="" class="menu-title">Excel</span></a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li class="has-sub nav-item">
@@ -51,6 +63,16 @@
                 <li class="nav-item">
                     <a asp-action="Index" asp-controller="Roles"><i class="icon-equalizer"></i><span data-i18n="" class="menu-title">Roles</span></a>
                 </li>
+
+                @* //profile *@
+                <li class="nav-item">
+                    <a asp-action="UserProfile" asp-controller="Accounts" class="nav-link">
+                        <i class="icon-user"></i>
+                        <span class="menu-title">Profile</span>
+                    </a>
+                </li>
+
+
                 <li class="nav-item">
                     <a asp-action="Index" asp-controller="Departments"><i class="icon-users"></i><span data-i18n="" class="menu-title">Departments</span></a>
                 </li>
