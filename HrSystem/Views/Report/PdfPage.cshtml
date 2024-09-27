@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Generation for Specific Div</title>
+</head>
+<body>
+    <p>This content will not be included in the PDF.</p>
+
+    <!-- Only this div will be printed -->
+    <div id="pdfContent">
+        <h1>PDF Content</h1>
+        <p>This content will be printed to the PDF.</p>
+    </div>
+
+    <button id="download">Download PDF</button>
+    <button id="send">Send PDF to Server</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <script>
+        const element = document.getElementById("pdfContent");
+
+        // Download PDF button handler
+        document.getElementById("download").addEventListener("click", function () {
+            const opt = {
+                margin: 0.5,
+                filename: 'div-content.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            // Generate and download the PDF of the specific div
+            html2pdf().set(opt).from(element).save();
+        });
+
+        // Send PDF button handler
+        document.getElementById("send").addEventListener("click", function () {
+            // Generate PDF as a Blob and send to the server
+            html2pdf().from(element).toPdf().outputPdf('blob').then(function (pdfBlob) {
+                // Create FormData object to send the file
+                const formData = new FormData();
+                formData.append('file', pdfBlob, 'div-content.pdf');
+
+                // Send the file via fetch
+                fetch('/Home/UploadPdf', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            alert('PDF sent to the server successfully!');
+                        } else {
+                            alert('Failed to send PDF.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error sending PDF.');
+                    });
+            });
+        });
+    </script>
+</body>
+</html>

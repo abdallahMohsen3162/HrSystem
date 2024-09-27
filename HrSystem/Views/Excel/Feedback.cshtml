@@ -1,17 +1,18 @@
 ﻿@{
     ViewBag.Title = "Feedback";
-    int affectedRows = (int)ViewBag.AffectedRows;
+    int affectedRows = ViewBag.AffectedRows != null ? (int)ViewBag.AffectedRows : 0;
 }
 
 <div class="alert alert-success" role="alert">
     @if (affectedRows > 0)
     {
+        <strong>Success! @affectedRows</strong> <span>records were successfully saved</span>
         
     }
     else
     {
-        <strong>No records were affected.</strong> 
+        <strong>No records were affected.</strong>
     }
 </div>
 
-<a href="@Url.Action("Index")" class="btn btn-primary">Back to Upload</a>
+<a href="@Url.Action("UploadExcel")" class="btn btn-primary">Back to Upload</a>

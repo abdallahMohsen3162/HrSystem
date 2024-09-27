@@ -35,6 +35,7 @@ namespace DataLayer.ViewModels
 
     public class EmployeeMonthlyReportViewModel
     {
+        public int ? EmployeeId { get; set; }
         public string EmployeeName { get; set; }
         public decimal BasicSalary { get; set; }
         public int AttendedDays { get; set; }

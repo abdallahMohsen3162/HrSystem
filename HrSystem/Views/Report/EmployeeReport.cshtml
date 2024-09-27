@@ -1,0 +1,31 @@
+﻿@model DataLayer.ViewModels.EmployeeMonthlyReportViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; }
+        h1 { text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+    </style>
+</head>
+<body>
+    <h1>Employee Monthly Report</h1>
+    <p><strong>Employee ID:</strong> @Model.EmployeeId</p>
+    <p><strong>Employee Name:</strong> @Model.EmployeeName</p>
+    <p><strong>Basic Salary:</strong> @Model.BasicSalary:C</p>
+    <table>
+        <tr><th>Attended Days</th><td>@Model.AttendedDays</td></tr>
+        <tr><th>Absent Days</th><td>@Model.AbsentDays</td></tr>
+        <tr><th>Bonuses (Hours)</th><td>@Model.BonusesByHours:C</td></tr>
+        <tr><th>Deductions (Hours)</th><td>@Model.DeductionsByHours:C</td></tr>
+        <tr><th>Bonuses (Money)</th><td>@Model.BonusesByMoney:C</td></tr>
+        <tr><th>Deductions (Money)</th><td>@Model.DeductionsByMoney:C</td></tr>
+        <tr><th>Net Salary</th><td>@Model.NetSalary:C</td></tr>
+        <tr><th>Hourly Rate</th><td>@Model.HourPrice:C</td></tr>
+    </table>
+</body>
+</html>

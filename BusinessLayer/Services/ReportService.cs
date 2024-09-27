@@ -133,6 +133,7 @@ namespace HrSystem.Services
                 {
                     return new EmployeeMonthlyReportViewModel
                     {
+                        EmployeeId = employee.Id,
                         EmployeeName = employee.EmployeeName,
                         BasicSalary = 0,
                         AttendedDays = 0,
@@ -200,6 +201,7 @@ namespace HrSystem.Services
 
                 return new EmployeeMonthlyReportViewModel
                 {
+                    EmployeeId = employee.Id,
                     EmployeeName = employee.EmployeeName,
                     BasicSalary = SalaryTillNow,
                     AttendedDays = attendedDays,
@@ -217,6 +219,7 @@ namespace HrSystem.Services
                 Console.WriteLine(ex.Message);
                 return new EmployeeMonthlyReportViewModel
                 {
+                    EmployeeId = employee.Id,
                     EmployeeName = employee.EmployeeName,
                     BasicSalary = 0,
                     AttendedDays = 0,
