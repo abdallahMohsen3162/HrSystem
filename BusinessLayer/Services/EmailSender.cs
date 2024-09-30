@@ -31,13 +31,11 @@ namespace BusinessLayer.Services
                 // Validate emailTo and _mailSettings.Email
                 if (string.IsNullOrWhiteSpace(emailTo))
                     throw new ArgumentException("Email recipient cannot be null or empty.", nameof(emailTo));
-                if (!IsValidEmail(emailTo))
-                    throw new ArgumentException("Invalid recipient email address.", nameof(emailTo));
+
 
                 if (string.IsNullOrWhiteSpace(_mailSettings.Email))
                     throw new ArgumentException("Sender email cannot be null or empty.", nameof(_mailSettings.Email));
-                if (!IsValidEmail(_mailSettings.Email))
-                    throw new ArgumentException("Invalid sender email address.", nameof(_mailSettings.Email));
+
 
                 var em = new MimeMessage
                 {
@@ -82,13 +80,10 @@ namespace BusinessLayer.Services
                 // Validate emailTo and _mailSettings.Email
                 if (string.IsNullOrWhiteSpace(emailTo))
                     throw new ArgumentException("Email recipient cannot be null or empty.", nameof(emailTo));
-                if (!IsValidEmail(emailTo))
-                    throw new ArgumentException("Invalid recipient email address.", nameof(emailTo));
+
 
                 if (string.IsNullOrWhiteSpace(_mailSettings.Email))
                     throw new ArgumentException("Sender email cannot be null or empty.", nameof(_mailSettings.Email));
-                if (!IsValidEmail(_mailSettings.Email))
-                    throw new ArgumentException("Invalid sender email address.", nameof(_mailSettings.Email));
 
                 var em = new MimeMessage
                 {
@@ -140,18 +135,6 @@ namespace BusinessLayer.Services
             }
         }
 
-        private bool IsValidEmail(string email)
-        {
-            try
-            {
-                var addr = new System.Net.Mail.MailAddress(email);
-                return addr.Address == email;
-            }
-            catch
-            {
-                return false;
-            }
-        }
     }
 }
 

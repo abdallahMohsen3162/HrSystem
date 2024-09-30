@@ -8,6 +8,7 @@ using DataLayer.Entities;
 using BusinessLogic.Services;
 using HrSystem.Services;
 using DataLayer.Settings;
+using BusinessLayer.Seeding;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,13 +47,43 @@ builder.Services.AddScoped<IPrivateHolidayService, PrivateHolidayService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IDepartmentsService, DepartmentsService>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.AddScoped<SuperAdminSeeder>();
+
+
+
+
+
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+{
+
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 4;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequiredUniqueChars = 1;
+})
+.AddRoles<IdentityRole>()
+.AddEntityFrameworkStores<ApplicationDbContext>();
+
+
+//allow easy password
+
 
 //builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 //    .AddEntityFrameworkStores<ApplicationDbContext>()
 //    .AddDefaultTokenProviders();
 
+
 var app = builder.Build();
 
+
+
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<SuperAdminSeeder>();
+    await seeder.SeedAsync();
+}
 
 
 

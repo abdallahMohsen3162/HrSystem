@@ -51,18 +51,34 @@ namespace BusinessLayer.Services
 
         public async Task<IdentityResult> CreateUserAsync(CreateUserViewModel model)
         {
-            var user = new ApplicationUser
+            try
             {
-                UserName = model.Username,
-                Fullname = model.FullName,
-                Email = model.Email
-            };
+                var user = new ApplicationUser
+                {
+                    UserName = model.Username,
+                    Fullname = model.FullName,
+                    Email = model.Email
+                };
 
-            var result = await _userManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded) return result;
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        Console.WriteLine(error.Description);
+                    }
+                    return result;
+                }
 
-            return await _userManager.AddToRoleAsync(user, model.Role);
+                return await _userManager.AddToRoleAsync(user, model.Role);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return IdentityResult.Failed(new IdentityError { Description = "An error occurred while creating the user." });
+            }
         }
+
 
         public async Task<EditUserViewModel> GetEditUserViewModelAsync(string id)
         {

@@ -14,6 +14,7 @@ namespace DataLayer.Entities
         [StringLength(100)]
         public string EmployeeName { get; set; }
 
+
         public string ?image { get; set; }
 
         [Required]

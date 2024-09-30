@@ -26,38 +26,40 @@
 
                 <div class="pt-2" id="pdfContent">
                     <div class="row">
-                        <table class="table table-striped table-bordered zero-configuration mt-40">
-                            <thead>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Employee Name</th>
-                                    <th>Phone</th>
-                                    <th>Salary</th>
-                                    <th>Attendance Days</th>
-                                    <th>Absent Days</th>
-                                    <th>Overtime Hours</th>
-                                    <th>Discount Hours</th>
-                                    <th>Bonuses</th>
-                                    <th>Deductions</th>
-                                    <th>Total Salary</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>@Model.EmployeeId</td>
-                                    <td>@Model.EmployeeName</td>
-                                    <td>N/A</td>
-                                    <td>@Model.BasicSalary.ToString("C")</td>
-                                    <td>@Model.AttendedDays</td>
-                                    <td>@Model.AbsentDays</td>
-                                    <td>@Model.BonusesByHours.ToString("F2")</td>
-                                    <td>@Model.DeductionsByHours.ToString("F2")</td>
-                                    <td>@Model.BonusesByMoney.ToString("C")</td>
-                                    <td>@Model.DeductionsByMoney.ToString("C")</td>
-                                    <td>@Model.NetSalary.ToString("C")</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                       <div class="table-responsive">
+                            <table class="table table-striped test-wraper table-bordered zero-configuration mt-40">
+                                <thead >
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Employee Name</th>
+                                        <th>Phone</th>
+                                        <th>Salary</th>
+                                        <th>Attendance Days</th>
+                                        <th>Absent Days</th>
+                                        <th>Overtime Hours</th>
+                                        <th>Discount Hours</th>
+                                        <th>Bonuses</th>
+                                        <th>Deductions</th>
+                                        <th>Total Salary</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>@Model.EmployeeId</td>
+                                        <td>@Model.EmployeeName</td>
+                                        <td>N/A</td>
+                                        <td>@Model.BasicSalary.ToString("C")</td>
+                                        <td>@Model.AttendedDays</td>
+                                        <td>@Model.AbsentDays</td>
+                                        <td>@Model.BonusesByHours.ToString("F2")</td>
+                                        <td>@Model.DeductionsByHours.ToString("F2")</td>
+                                        <td>@Model.BonusesByMoney.ToString("C")</td>
+                                        <td>@Model.DeductionsByMoney.ToString("C")</td>
+                                        <td>@Model.NetSalary.ToString("C")</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                       </div>
                     </div>
 
                     <div class="row">
@@ -131,11 +133,17 @@
                                     much for the next year and yet far too little for the next 10.
                                 </p>
                             </div>
-                            <div class="text-center">
+                            <div class="col-md-3 col-sm-12">
 
                             <button id="download" class="btn btn-primary my-1"> <i class="fa fa-download"></i> Download Invoice</button>
-                            <button id="send" class="btn btn-success my-1"><i class="fa fa-paper-plane-o"></i> Send PDF via email</button>
                             </div>
+
+                            <div class="col-md-3 col-sm-12">
+                            <input type="email" name="email" value="" id="email" placeholder="Email" />
+                            <button id="send" class="btn btn-success my-1"><i class="fa fa-paper-plane-o"></i> Send PDF via email</button>
+
+                            </div>
+                            
                         </div>
                 </div>
 
@@ -152,7 +160,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 <script>
     const element = document.getElementById("pdfContent");
-
+    const emailInput = document.getElementById("email");
 
     document.getElementById("download").addEventListener("click", function () {
         const opt = {
@@ -168,12 +176,12 @@
 
 
     document.getElementById("send").addEventListener("click", function () {
-
+        const email = emailInput.value;
         html2pdf().from(element).toPdf().outputPdf('blob').then(function (pdfBlob) {
 
             const formData = new FormData();
             formData.append('file', pdfBlob, 'div-content.pdf');
-
+            formData.append('email', email);
 
             fetch('/Report/UploadPdf', {
                 method: 'POST',

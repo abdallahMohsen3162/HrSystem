@@ -186,13 +186,16 @@ namespace HrSystem.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadPdf(IFormFile file)
+        public async Task<IActionResult> UploadPdf(IFormFile file, string email)
         {
-            FileManager fileManager = new FileManager("wwwroot");
+            if (email == null || string.IsNullOrEmpty(email))
+            {
+                return BadRequest(new { message = "Email is required" });
+            }
+
             if (file != null && file.Length > 0)
             {
-                string filePath = await fileManager.SaveFileAsync(file, "pdf");
-                _emailSender.SendEmailWithAttachmentsAsync("abdallah3162@gmail.com", "subject", "body", new List<IFormFile> { file });
+                _emailSender.SendEmailWithAttachmentsAsync(email, "subject", "body", new List<IFormFile> { file });
                 return Ok(new { message = "PDF uploaded successfully!" });
             }
 
