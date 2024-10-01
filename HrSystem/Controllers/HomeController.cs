@@ -34,7 +34,6 @@ namespace HrSystem.Controllers
 
         public IActionResult Index()
         {
-            var result = emailSender.SendEmailAsync("abdallah3162@outlook.com", "subject", "body");
             return View();
         }
 
