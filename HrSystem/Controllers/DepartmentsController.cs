@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Interfaces;
 using BusinessLayer.Services;
 using DataLayer.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -10,13 +11,13 @@ namespace HrSystem.Controllers
     {
         private readonly IDepartmentsService _departmentService;
 
-
-
-
+        
         public DepartmentsController(IDepartmentsService departmentService)
         {
             _departmentService = departmentService;
         }
+
+        [Authorize(Policy = AuthConstants.Department.Show)]
         public IActionResult Index()
         {
             var departments = _departmentService.GetDepartments();
@@ -24,7 +25,7 @@ namespace HrSystem.Controllers
             //ViewData["Departments"] = new SelectList(departments, "Id", "DepartmentName");
             return View(departments);
         }
-
+        [Authorize(Policy = AuthConstants.Department.Add)]
         [HttpGet]
         public IActionResult Create()
         {
@@ -32,6 +33,7 @@ namespace HrSystem.Controllers
 
         }
 
+        [Authorize(Policy = AuthConstants.Department.Add)]
         [HttpPost]
         public async Task<IActionResult> Create(Department department)
         {
@@ -44,7 +46,7 @@ namespace HrSystem.Controllers
             return View(department);
         }
 
-
+        [Authorize(Policy = AuthConstants.Department.Edit)]
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -56,6 +58,7 @@ namespace HrSystem.Controllers
             return View(department);
         }
 
+        [Authorize(Policy = AuthConstants.Department.Edit)]
         [HttpPost]
         public async Task<IActionResult> Edit(Department department)
         {
@@ -67,7 +70,7 @@ namespace HrSystem.Controllers
             }
             return View(department);
         }
-
+        [Authorize(Policy = AuthConstants.Department.Delete)]
         public IActionResult DeleteConfirmed(int id)
         {
             id = (int)id;

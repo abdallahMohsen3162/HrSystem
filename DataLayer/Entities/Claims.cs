@@ -45,9 +45,26 @@ namespace DataLayer.Entities
             new Claim(AuthConstants.Group.Add, AuthConstants.Group.Add),
             new Claim(AuthConstants.Group.Edit, AuthConstants.Group.Edit),
             new Claim(AuthConstants.Group.Delete, AuthConstants.Group.Delete),
+
+            new Claim(AuthConstants.Department.Show, AuthConstants.Department.Show),
+            new Claim(AuthConstants.Department.Add, AuthConstants.Department.Add),
+            new Claim(AuthConstants.Department.Edit, AuthConstants.Department.Edit),
+            new Claim(AuthConstants.Department.Delete, AuthConstants.Department.Delete),
+
+
         };
     }
 
 
 
 }
+
+
+//public class Department
+//{
+//    public const string Show = "showDepartment";
+//    public const string Add = "addDepartment";
+//    public const string Edit = "editDepartment";
+//    public const string Delete = "deleteDepartment";
+
+//}

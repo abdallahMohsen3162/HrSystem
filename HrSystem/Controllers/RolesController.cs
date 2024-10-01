@@ -9,8 +9,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.AspNetCore.Authorization;
 
-namespace YourNamespace.Controllers
+namespace HrSystem.Controllers
 {
     public class RolesController : Controller
     {
@@ -38,12 +39,13 @@ namespace YourNamespace.Controllers
             
             return View(model);
         }
+        [Authorize(Policy = AuthConstants.Permissions.Show)]
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
-
+        [Authorize(Policy = AuthConstants.Permissions.Add)]
         [HttpPost]
         public async Task<IActionResult> CreateRole(CreateRoleClaimsViewModel model)
         {
@@ -87,7 +89,7 @@ namespace YourNamespace.Controllers
 
 
 
-
+        [Authorize(Policy = AuthConstants.Permissions.Delete)]
         [HttpPost]
         public async Task<IActionResult> DeleteRole(string roleId)
         {
@@ -105,7 +107,7 @@ namespace YourNamespace.Controllers
             }
         }
 
-
+        [Authorize(Policy = AuthConstants.Permissions.Add)]
         [HttpPost]
         public async Task<IActionResult> AddClaimToRole(string roleId, string claimType, string claimValue)
         {
@@ -113,7 +115,7 @@ namespace YourNamespace.Controllers
             return RedirectToAction("Index");
         }
 
-
+        [Authorize(Policy = AuthConstants.Permissions.Edit)]
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
@@ -142,6 +144,7 @@ namespace YourNamespace.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = AuthConstants.Permissions.Edit)]
         public async Task<IActionResult> Edit(EditRoleClaimsViewModel model)
         {
             if (ModelState.IsValid)

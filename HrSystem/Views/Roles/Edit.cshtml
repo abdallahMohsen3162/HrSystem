@@ -77,6 +77,15 @@
                                     <td><input type="checkbox" name="Claims" value="@AuthConstants.GeneralSettings.Edit" @(Model.Claims.Contains(AuthConstants.GeneralSettings.Edit) ? "checked" : "") /></td>
                                     <td><input type="checkbox" name="Claims" value="@AuthConstants.GeneralSettings.Delete" @(Model.Claims.Contains(AuthConstants.GeneralSettings.Delete) ? "checked" : "") /></td>
                                 </tr>
+
+
+                                <tr>
+                                    <td>Departments</td>
+                                    <td><input type="checkbox" name="Claims" value="@AuthConstants.Department.Show" @(Model.Claims.Contains(AuthConstants.Department.Show) ? "checked" : "") /></td>
+                                    <td><input type="checkbox" name="Claims" value="@AuthConstants.Department.Add" @(Model.Claims.Contains(AuthConstants.Department.Add) ? "checked" : "") /></td>
+                                    <td><input type="checkbox" name="Claims" value="@AuthConstants.Department.Edit" @(Model.Claims.Contains(AuthConstants.Department.Edit) ? "checked" : "") /></td>
+                                    <td><input type="checkbox" name="Claims" value="@AuthConstants.Department.Delete" @(Model.Claims.Contains(AuthConstants.Department.Delete) ? "checked" : "") /></td>
+                                </tr>
                             </tbody>
                         </table>
 

@@ -5,6 +5,7 @@ using DataLayer.ViewModels;
 using BusinessLayer.Interfaces;
 using DataLayer.Entities;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HrSystem.Controllers
 {
@@ -20,6 +21,7 @@ namespace HrSystem.Controllers
         }
 
         // GET: Employee
+        [Authorize(Policy = AuthConstants.Employee.Show)]
         public async Task<IActionResult> Index()
         {
             var model = await _employeeService.GetAllEmployeesAsync();
@@ -28,6 +30,7 @@ namespace HrSystem.Controllers
         }
 
         // GET: Employee/Details/5
+        [Authorize(Policy = AuthConstants.Employee.Show)]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,6 +48,7 @@ namespace HrSystem.Controllers
         }
 
         // GET: Employee/Create
+        [Authorize(Policy = AuthConstants.Employee.Add)]
         public IActionResult Create()
         {
 
@@ -57,6 +61,7 @@ namespace HrSystem.Controllers
         // POST: Employee/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = AuthConstants.Employee.Add)]
         public async Task<IActionResult> Create(CreateEmployeeViewModel employee)
         {
             if (ModelState.IsValid)
@@ -71,6 +76,7 @@ namespace HrSystem.Controllers
         }
 
         // GET: Employee/Edit/5
+        [Authorize(Policy = AuthConstants.Employee.Edit)]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -111,6 +117,7 @@ namespace HrSystem.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = AuthConstants.Employee.Edit)]
         public async Task<IActionResult> Edit(int id, EditeEmployeeViewModel employee)
         {
             if (id != employee.Id)
@@ -129,6 +136,8 @@ namespace HrSystem.Controllers
             return View(employee);
         }
 
+
+        [Authorize(Policy = AuthConstants.Employee.Delete)]
         // GET: Employee/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -149,6 +158,7 @@ namespace HrSystem.Controllers
         // POST: Employee/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = AuthConstants.Employee.Delete)]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _employeeService.DeleteEmployeeAsync(id);

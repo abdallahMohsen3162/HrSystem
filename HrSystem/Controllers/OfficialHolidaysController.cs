@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using BusinessLayer.Interfaces;
 using DataLayer.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HrSystem.Controllers
 {
@@ -17,19 +18,21 @@ namespace HrSystem.Controllers
             _holidayService = holidayService;
             _context = context;
         }
-
+        [Authorize(Policy = AuthConstants.Attendance.Show)]
         public async Task<IActionResult> Index()
         {
             var model = await _holidayService.GetAllHolidaysAsync();
             ViewBag.days = _holidayService.GetHolidayDaysOfWeek(model);
             return View(model);
         }
-
+        [Authorize(Policy = AuthConstants.Attendance.Add)]
         public IActionResult Create()
         {
             return View();
         }
 
+
+        [Authorize(Policy = AuthConstants.Attendance.Add)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Date")] Holiday holiday)
@@ -42,6 +45,8 @@ namespace HrSystem.Controllers
             return View(holiday);
         }
 
+
+        [Authorize(Policy = AuthConstants.Attendance.Edit)]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -57,6 +62,8 @@ namespace HrSystem.Controllers
             return View(holiday);
         }
 
+
+        [Authorize(Policy = AuthConstants.Attendance.Edit)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Date")] Holiday holiday)
@@ -90,7 +97,7 @@ namespace HrSystem.Controllers
 
 
 
-
+        [Authorize(Policy = AuthConstants.Attendance.Delete)]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

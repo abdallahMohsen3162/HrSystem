@@ -40,7 +40,7 @@ namespace BusinessLayer.Seeding
                     Console.WriteLine($"{r.Id}: {r.Name}");
                 }
 
-  
+                 Console.WriteLine("Creating SuperAdmin user...");
                 var model = new CreateUserViewModel
                 {
                     Username = "Admin@yopmail.com",

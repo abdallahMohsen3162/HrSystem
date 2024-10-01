@@ -47,20 +47,18 @@
 
                     <h2>HR System Login</h2>
 
-                    <!-- Display a validation summary for model-level errors -->
+
                     <div asp-validation-summary="All" class="text-danger"></div>
 
                     <form action="Signin" method="post">
                         <div class="inputBx">
                             <input asp-for="UserName" type="text" required="required">
                             <span>Login</span>
-                            <!-- Display field-specific validation error -->
                             <span asp-validation-for="UserName" class="text-danger"></span>
                         </div>
                         <div class="inputBx password">
                             <input asp-for="Password" id="password-input" type="password" required="required">
                             <span>Password</span>
-                            <!-- Display field-specific validation error -->
                             <span asp-validation-for="Password" class="text-danger"></span>
                             <a href="#" class="password-control" onclick="return show_hide_password(this);"></a>
                         </div>
@@ -69,7 +67,7 @@
                             Remember
                         </label>
                         <div class="inputBx">
-                            <button type="submit" class="btn btn-outline-primary">
+                            <button type="submit" class="btn bg-white rounded-pill">
                                 Login
                             </button>
                         </div>

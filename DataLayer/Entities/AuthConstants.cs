@@ -61,6 +61,14 @@ namespace DataLayer.Entities
             public const string Edit = "editGroup";
             public const string Delete = "deleteGroup";
         }
+        public class Department
+        {
+            public const string Show = "showDepartment";
+            public const string Add = "addDepartment";
+            public const string Edit = "editDepartment";
+            public const string Delete = "deleteDepartment";
+
+        }
 
     }
 }

@@ -4,6 +4,7 @@ using DataLayer.Data;
 using DataLayer.Entities;
 using DataLayer.Migrations;
 using DataLayer.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -23,14 +24,14 @@ namespace HrSystem.Controllers
             _attendanceService = attendanceService;
             _context = context;
         }
-
+        [Authorize(Policy = AuthConstants.Attendance.Show)]
         public async Task<IActionResult> Index(int? employeeId, DateTime? startDate, DateTime? endDate)
         {
             var attendanceList = await _attendanceService.GetAttendanceRecords(employeeId, startDate, endDate);
             ViewData["Employees"] = new SelectList(await _attendanceService.GetEmployeesAsync(), "Id", "EmployeeName");
             return View(attendanceList);
         }
-
+        [Authorize(Policy = AuthConstants.Attendance.Add)]
         public IActionResult Create()
         {
             ViewBag.Employees = new SelectList(_attendanceService.GetEmployeesAsync().Result, "Id", "EmployeeName");
@@ -39,6 +40,7 @@ namespace HrSystem.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Policy = AuthConstants.Attendance.Add)]
         public async Task<IActionResult> Create(AttendanceTable attendance)
         {
             if (ModelState.IsValid)
@@ -50,6 +52,8 @@ namespace HrSystem.Controllers
             return View(attendance);
         }
 
+
+        [Authorize(Policy = AuthConstants.Attendance.Edit)]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -61,6 +65,8 @@ namespace HrSystem.Controllers
             return View(attendance);
         }
 
+
+        [Authorize(Policy = AuthConstants.Attendance.Edit)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, AttendanceTable attendance)
@@ -77,12 +83,14 @@ namespace HrSystem.Controllers
             return View(attendance);
         }
 
+
+        [Authorize(Policy = AuthConstants.Attendance.Delete)]
         public async Task<IActionResult> Delete(int id)
         {
             await _attendanceService.DeleteAttendance(id);
             return RedirectToAction(nameof(Index));
         }
-
+        [Authorize(Policy = AuthConstants.Attendance.Show)]
         public async Task<IActionResult> Permissions(int? employeeId, DateTime? startDate, DateTime? endDate)
         {
             ViewData["Employees"] = new SelectList(await _attendanceService.GetEmployeesAsync(), "Id", "EmployeeName");
@@ -90,6 +98,8 @@ namespace HrSystem.Controllers
             return View(attendanceList);
         }
 
+
+        [Authorize(Policy = AuthConstants.Attendance.Show)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SaveEarlyTime(SaveEarlyTimeViewModel model)
@@ -103,6 +113,7 @@ namespace HrSystem.Controllers
             return View("Permissions", model);
         }
 
+        [Authorize(Policy = AuthConstants.Attendance.Show)]
         [HttpGet]
         public async Task<IActionResult> CreatePermession()
         {

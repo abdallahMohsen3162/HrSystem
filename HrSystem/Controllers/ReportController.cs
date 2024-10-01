@@ -17,6 +17,8 @@ using HrSystem.Services;
 using SelectPdf;
 using PdfDocument = SelectPdf.PdfDocument;
 using BusinessLayer.FileManagement;
+using Microsoft.AspNetCore.Authorization;
+using DataLayer.Entities;
 
 
 namespace HrSystem.Controllers
@@ -28,7 +30,7 @@ namespace HrSystem.Controllers
         private readonly IDepartmentsService _departmentsService;
         private readonly IConverter _converter;
         private readonly IEmailSender _emailSender;
-
+        
         public ReportController(IEmailSender emailSender,/* IConverter converter,*/ IReportService reportService, IDepartmentsService departmentsService, ApplicationDbContext context)
         {
             _reportService = reportService;
@@ -38,7 +40,7 @@ namespace HrSystem.Controllers
             _emailSender = emailSender;
             
         }
-
+        [Authorize(Policy = AuthConstants.Salary.Show)]
         [HttpGet]
         public IActionResult Index()
         {
@@ -47,6 +49,8 @@ namespace HrSystem.Controllers
             return View();
         }
 
+
+        [Authorize(Policy = AuthConstants.Salary.Show)]
         [HttpGet]
         public async Task<IActionResult> MultiReport(int month = -1, int year = -1, int departmentId = -1)
         {
@@ -64,7 +68,7 @@ namespace HrSystem.Controllers
             ViewBag.departments = _context.Departments.ToList();
             return View(monthlyReports);
         }
-
+        [Authorize(Policy = AuthConstants.Salary.Show)]
         [HttpGet]
         public async Task<IActionResult> EmployeeMonthlyReport(int month, int year, int employeeId, int departmentId)
         {
@@ -81,7 +85,7 @@ namespace HrSystem.Controllers
             ViewBag.employeeId = employeeId;
             return View(report);
         }
-
+        [Authorize(Policy = AuthConstants.Salary.Show)]
         public async Task<IActionResult> DepartmentReports(int month, int year, int departmentId = -1)
         {
             Dictionary<string, List<EmployeeMonthlyReportViewModel>> mp = _reportService.GenerateDepartmentReport(month, year, departmentId);
@@ -93,6 +97,7 @@ namespace HrSystem.Controllers
 
             return View(mp);
         }
+        [Authorize(Policy = AuthConstants.Salary.Show)]
         public async Task<IActionResult> Invoice(int id, int year, int month)
         {
 
@@ -167,7 +172,7 @@ namespace HrSystem.Controllers
 
 
 
-
+        [Authorize(Policy = AuthConstants.Salary.Show)]
         public async Task<FileContentResult> DownloadInvoicePdf(string html)
         {
             html = html.Replace("StrTag", "<").Replace("EndTag", ">");
@@ -179,12 +184,13 @@ namespace HrSystem.Controllers
             
             return File(pdf, "application/pdf", "Invoice.pdf");
         }
-
+        [Authorize(Policy = AuthConstants.Salary.Show)]
         public async Task<IActionResult> PdfPage()
         {
             return View();
         }
 
+        [Authorize(Policy = AuthConstants.Salary.Show)]
         [HttpPost]
         public async Task<IActionResult> UploadPdf(IFormFile file, string email)
         {

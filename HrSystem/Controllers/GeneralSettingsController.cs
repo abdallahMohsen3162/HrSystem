@@ -5,6 +5,7 @@ using BusinessLayer.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using DataLayer.Entities;
 using BusinessLayer.Services;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace HrSystem.Controllers
@@ -17,7 +18,7 @@ namespace HrSystem.Controllers
         {
             _generalSettingsService = generalSettingsService;
         }
-
+        [Authorize(Policy = AuthConstants.Attendance.Show)]
         public async Task<IActionResult> Index()
         {
             var viewModel = new GeneralSettingsIndexViewModel
@@ -29,7 +30,7 @@ namespace HrSystem.Controllers
             return View(viewModel);
         }
 
-         
+        [Authorize(Policy = AuthConstants.Attendance.Add)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateGeneralSettings(GeneralSettingsIndexViewModel model)
@@ -78,7 +79,7 @@ namespace HrSystem.Controllers
 
 
 
-
+        [Authorize(Policy = AuthConstants.Attendance.Edit)]
         public async Task<IActionResult> Edit(int id)
         {
             var settings = await _generalSettingsService.GetSettingsByEmployeeIdAsync(id);
@@ -91,6 +92,8 @@ namespace HrSystem.Controllers
             return View(settings);
         }
 
+
+        [Authorize(Policy = AuthConstants.Attendance.Edit)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, GeneralSettings model)
@@ -125,17 +128,12 @@ namespace HrSystem.Controllers
 
 
 
-
+        [Authorize(Policy = AuthConstants.Attendance.Show)]
         public async Task<IActionResult> Details(int id)
         {
             var viewModel = await _generalSettingsService.GetEmployeeDetailsAsync(id);
 
-            Console.WriteLine("viewModel");
-            Console.WriteLine("viewModel");
-            Console.WriteLine("viewModel");
-            Console.WriteLine("viewModel");
-            Console.WriteLine("viewModel");
-            Console.WriteLine("viewModel");
+
             if (viewModel == null)
             {
 

@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Interfaces;
 using BusinessLogic.Services;
 using DataLayer.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -16,19 +17,21 @@ namespace HrSystem.Controllers
         {
             _privateHolidayService = privateHolidayService;
         }
-
+        [Authorize(Policy = AuthConstants.Attendance.Show)]
         public async Task<IActionResult> Index()
         {
             var holidays = await _privateHolidayService.GetAllPrivateHolidays();
             return View(holidays);
         }
-
+        [Authorize(Policy = AuthConstants.Attendance.Add)]
         public IActionResult Create()
         {
             ViewData["EmployeeId"] = new SelectList(_privateHolidayService.GetAllEmployees().Result, "Id", "EmployeeName");
             return View();
         }
 
+
+        [Authorize(Policy = AuthConstants.Attendance.Add)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,EmployeeId,HolidayDate")] PrivateHoliday privateHoliday)
@@ -43,6 +46,8 @@ namespace HrSystem.Controllers
             return View(privateHoliday);
         }
 
+
+        [Authorize(Policy = AuthConstants.Attendance.Edit)]
         public async Task<IActionResult> Edit(int? id)
         {
             var privateHoliday = await _privateHolidayService.GetPrivateHolidayById(id.Value);
@@ -50,6 +55,8 @@ namespace HrSystem.Controllers
             return View(privateHoliday);
         }
 
+
+        [Authorize(Policy = AuthConstants.Attendance.Edit)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,EmployeeId,HolidayDate")] PrivateHoliday privateHoliday)
@@ -64,6 +71,8 @@ namespace HrSystem.Controllers
             return View(privateHoliday);
         }
 
+
+        [Authorize(Policy = AuthConstants.Attendance.Delete)]
         public async Task<IActionResult> Delete(int? id)
         {
             await _privateHolidayService.DeletePrivateHoliday(id.Value);

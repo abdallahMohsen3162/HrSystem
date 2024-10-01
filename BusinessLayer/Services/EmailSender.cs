@@ -105,15 +105,13 @@ namespace BusinessLayer.Services
                         if (file.Length > 0)
                         {
                             using var ms = new MemoryStream();
-                            await file.CopyToAsync(ms); // Copy file contents to a memory stream
+                            await file.CopyToAsync(ms); 
                             var fileBytes = ms.ToArray();
 
-                            // Add the attachment to the email
                             builder.Attachments.Add(file.FileName, fileBytes);
                         }
                     }
                 }
-
                 em.Body = builder.ToMessageBody();
                 em.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Email));
 
@@ -125,12 +123,10 @@ namespace BusinessLayer.Services
             }
             catch (ArgumentException ex)
             {
-                // Catch and log specific argument exceptions
                 Console.WriteLine($"Argument Error: {ex.Message}");
             }
             catch (Exception ex)
             {
-                // General error logging
                 Console.WriteLine($"Error in SendEmailWithAttachmentsAsync: {ex.Message}");
             }
         }

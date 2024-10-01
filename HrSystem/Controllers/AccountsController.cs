@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Interfaces;
 using BusinessLayer.Services;
+using DataLayer.Entities;
 using DataLayer.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,20 +19,21 @@ namespace HrSystem.Controllers
         {
             _userService = userService;
         }
-
+        [Authorize(Policy = AuthConstants.Permissions.Show)]
         public async Task<IActionResult> Index()
         {
 
             var model = await _userService.GetAllUsersAsync();
             return View(model);
         }
-
+        [Authorize(Policy = AuthConstants.Permissions.Add)]
         public async Task<IActionResult> Create()
         {
             var model = await _userService.GetCreateUserViewModelAsync();
             return View(model);
         }
 
+        [Authorize(Policy = AuthConstants.Permissions.Add)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateUserViewModel model)
@@ -54,7 +56,7 @@ namespace HrSystem.Controllers
             model.AvailableRoles = (await _userService.GetCreateUserViewModelAsync()).AvailableRoles;
             return View(model);
         }
-
+        [Authorize(Policy = AuthConstants.Permissions.Edit)]
         public async Task<IActionResult> Edit(string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -71,6 +73,7 @@ namespace HrSystem.Controllers
             return View(model);
         }
 
+        [Authorize(Policy = AuthConstants.Permissions.Edit)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EditUserViewModel model)
@@ -99,7 +102,7 @@ namespace HrSystem.Controllers
             model.AvailableRoles = (await _userService.GetCreateUserViewModelAsync()).AvailableRoles;
             return View(model);
         }
-
+        [Authorize(Policy = AuthConstants.Permissions.Delete)]
         public async Task<IActionResult> Delete(string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -116,8 +119,10 @@ namespace HrSystem.Controllers
             return View(model);
         }
 
+        [Authorize(Policy = AuthConstants.Permissions.Delete)]
         [HttpPost]
         [ValidateAntiForgeryToken]
+
         public async Task<IActionResult> Delete(DeleteUserViewModel model)
         {
             var result = await _userService.DeleteUserAsync(model.Id);
@@ -134,6 +139,7 @@ namespace HrSystem.Controllers
 
             return View(model);
         }
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -236,5 +242,13 @@ namespace HrSystem.Controllers
 
 
 
+    }
+
+    public class AccountController: Controller 
+    {
+        public IActionResult Login()
+        {
+            return RedirectToAction("Login", "Accounts");
+        }
     }
 }
