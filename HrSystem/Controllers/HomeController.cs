@@ -31,7 +31,6 @@ namespace HrSystem.Controllers
 
 
         //role claim
-        [Authorize(Policy = AuthConstants.Employee.Show)]
 
         public IActionResult Index()
         {

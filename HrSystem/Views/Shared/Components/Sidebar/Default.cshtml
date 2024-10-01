@@ -95,18 +95,6 @@
                     </ul>
                 </li>
 
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <li class="nav-item">
-                        <a asp-action="Logout" asp-controller="Accounts"><i class="icon-pin"></i><span data-i18n="" class="menu-title">Logout</span></a>
-                    </li>
-                }
-                else
-                {
-                    <li class="nav-item">
-                        <a asp-action="Login" asp-controller="Accounts"><i class="icon-pin"></i><span data-i18n="" class="menu-title">Login</span></a>
-                    </li>
-                }
 
             </ul>
         </div>
