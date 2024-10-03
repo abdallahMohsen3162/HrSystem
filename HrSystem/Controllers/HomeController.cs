@@ -18,7 +18,7 @@ namespace HrSystem.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly IEmailSender emailSender;
-       
+        
         public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IEmailSender emailSender)
         {
             _logger = logger;
@@ -28,12 +28,13 @@ namespace HrSystem.Controllers
         }
 
 
-
+        
 
         //role claim
 
         public IActionResult Index()
         {
+            emailSender.SendOutlookEmail("abdallah3162@outlook.com", "subject");
             return View();
         }
 

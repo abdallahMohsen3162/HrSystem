@@ -11,5 +11,7 @@ namespace BusinessLayer.Interfaces
     {
         Task SendEmailAsync(string email, string subject, string message);
         Task SendEmailWithAttachmentsAsync(string emailTo, string subject, string message, List<IFormFile> files);
+
+        bool SendOutlookEmail(string email, string message);
     }
 }

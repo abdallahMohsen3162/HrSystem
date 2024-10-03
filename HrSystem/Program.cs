@@ -25,10 +25,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Configure Identity
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = "/Accounts/Login"; // Set your custom login path
+    options.LoginPath = "/Accounts/Login"; 
 
 
-    options.AccessDeniedPath = "/Errors/NowAllowd"; // Access denied page
+    options.AccessDeniedPath = "/Errors/NowAllowd"; 
     
 });
 
@@ -50,6 +50,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 
 // Configure Mail Settings
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.Configure<OutlookSettings>(builder.Configuration.GetSection("OutlookSettings"));
+
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 // Register Services
