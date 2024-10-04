@@ -18,6 +18,12 @@ builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation()
         option.HtmlHelperOptions.ClientValidationEnabled = true;
     });
 
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+    });
+
 // Register DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -65,6 +71,9 @@ builder.Services.AddScoped<IPrivateHolidayService, PrivateHolidayService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IDepartmentsService, DepartmentsService>();
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddSwaggerGen();
 // Register SuperAdminSeeder
 builder.Services.AddScoped<SuperAdminSeeder>();
 
@@ -77,17 +86,21 @@ builder.Services.AddAuthorization(options =>
     }
 });
 
+
+
 var app = builder.Build();
 
 // Apply Seed Data in Development
 if (app.Environment.IsDevelopment())
 {
-    using (var scope = app.Services.CreateScope())
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
     {
-        var seeder = scope.ServiceProvider.GetRequiredService<SuperAdminSeeder>();
-        await seeder.SeedAsync();
-    }
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        c.RoutePrefix = "swagger"; 
+    });
 }
+
 
 // Configure Middleware
 if (!app.Environment.IsDevelopment())
@@ -103,6 +116,7 @@ app.UseRouting();
 
 // Authentication should be before Authorization
 app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(

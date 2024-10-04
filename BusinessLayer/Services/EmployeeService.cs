@@ -25,8 +25,7 @@ namespace BusinessLayer.Services
 
         public async Task<List<Employee>> GetAllEmployeesAsync()
         {
-            //including department name
-            return await _context.Employee.Include(e => e.Department).ToListAsync();
+            return await _context.Employee.Include(e => e.Department).Include(e => e.GeneralSettings).ToListAsync();
         }
 
         public async Task<Employee> GetEmployeeByIdAsync(int id)

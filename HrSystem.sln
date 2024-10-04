@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HrSystem", "HrSystem\HrSystem.csproj", "{E54DC33F-697C-42F8-850C-A74E57335519}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrSystem", "HrSystem\HrSystem.csproj", "{E54DC33F-697C-42F8-850C-A74E57335519}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\DataLayer.csproj", "{90B58BF5-97CA-46AC-9210-E9EB461F31C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer", "DataLayer\DataLayer.csproj", "{90B58BF5-97CA-46AC-9210-E9EB461F31C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{15A1309B-24AE-4C1C-8155-337B704E041C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{15A1309B-24AE-4C1C-8155-337B704E041C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
