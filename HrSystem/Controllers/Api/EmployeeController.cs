@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using BusinessLayer.Interfaces;
+using DataLayer.Data;
 using DataLayer.dto.Employee;
 using DataLayer.Entities;
+using DataLayer.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HrSystem.Controllers.Api
@@ -12,10 +14,12 @@ namespace HrSystem.Controllers.Api
     {
         private readonly IEmployeeService employeeService;
         private readonly IMapper _mapper;
-        public EmployeeController(IEmployeeService employeeService, IMapper mapper)
+        private readonly ApplicationDbContext _context;
+        public EmployeeController(IEmployeeService employeeService, IMapper mapper, ApplicationDbContext context)
         {
             this.employeeService = employeeService;
             _mapper = mapper;
+            _context = context;
         }
 
         [HttpGet]
@@ -36,5 +40,82 @@ namespace HrSystem.Controllers.Api
                return BadRequest(ex.Message);
             }
         }
+
+
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            try
+            {
+                Employee emp = employeeService.GetEmployeeByIdAsync(id).Result;
+                EmployeeDto employee = _mapper.Map<EmployeeDto>(emp);
+                return Ok(employee);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromForm] CreateEmployeeViewModel employee)
+        {
+            try
+            {
+                // Log values for debugging
+                Console.WriteLine($"Address: {employee.Address}");
+                Console.WriteLine($"Attendance Time: {employee.AttendanceTime}");
+                Console.WriteLine($"Departure Time: {employee.DepartureTime}");
+                var validate = new CreateEmployeeViewModelValidator(this._context);
+                var result = validate.Validate(employee);
+                if (!result.IsValid)
+                {
+                    return BadRequest(result.Errors);
+                }
+
+                await employeeService.CreateEmployeeAsync(employee);
+
+                return Ok(employee);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id) 
+        {
+            try
+            {
+                await employeeService.DeleteEmployeeAsync(id);
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPatch("{id}")]
+        //public async Task UpdateEmployeeAsync(int id, EditeEmployeeViewModel employee)
+        public async Task<IActionResult> Update(int id, [FromForm] EditeEmployeeViewModel employee)
+        {
+            try
+            {
+                var validate = new CreateEmployeeViewModelValidator(this._context);
+                await employeeService.UpdateEmployeeAsync(id, employee);
+                return Ok();
+            }catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+
+
     }
 }

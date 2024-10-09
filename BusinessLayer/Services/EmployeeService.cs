@@ -30,34 +30,40 @@ namespace BusinessLayer.Services
 
         public async Task<Employee> GetEmployeeByIdAsync(int id)
         {
-            return await _context.Employee.FirstOrDefaultAsync(m => m.Id == id);
+            return await _context.Employee.Include(e => e.Department).Include(e => e.GeneralSettings).FirstOrDefaultAsync(m => m.Id == id);
         }
 
         public async Task CreateEmployeeAsync(CreateEmployeeViewModel employee)
         {
-            Console.WriteLine(employee.DepartmentId);
-            string imageUrl = await _fileManager.SaveFileAsync(employee.ProfileImage, "Employees/Images");
-            var emp = new Employee
+            try
             {
-                EmployeeName = employee.EmployeeName,
-                Address = employee.Address,
-                PhoneNumber = employee.PhoneNumber,
-                Gender = employee.Gender,
-                Nationality = employee.Nationality,
-                DateOfBirth = employee.DateOfBirth,
-                NationalId = employee.NationalId,
-                JoinDate = employee.JoinDate,
-                Salary = employee.Salary,
-                AttendanceTime = employee.AttendanceTime,
-                DepartureTime = employee.DepartureTime,
-                image = imageUrl,
-                DepartmentId = employee.DepartmentId,
-                
-            };
+                Console.WriteLine(employee.DepartmentId);
+                string imageUrl = await _fileManager.SaveFileAsync(employee.ProfileImage, "Employees/Images");
+                var emp = new Employee
+                {
+                    EmployeeName = employee.EmployeeName,
+                    Address = employee.Address,
+                    PhoneNumber = employee.PhoneNumber,
+                    Gender = employee.Gender,
+                    Nationality = employee.Nationality,
+                    DateOfBirth = employee.DateOfBirth,
+                    NationalId = employee.NationalId,
+                    JoinDate = employee.JoinDate,
+                    Salary = employee.Salary,
+                    AttendanceTime = employee.AttendanceTime,
+                    DepartureTime = employee.DepartureTime,
+                    image = imageUrl,
+                    DepartmentId = employee.DepartmentId,
+
+                };
 
 
-            _context.Add(emp);
-            await _context.SaveChangesAsync();
+                _context.Add(emp);
+                await _context.SaveChangesAsync();
+            }catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             //var settings = new GeneralSettings
             //{
@@ -110,11 +116,19 @@ namespace BusinessLayer.Services
 
         public async Task DeleteEmployeeAsync(int id)
         {
-            var employee = await _context.Employee.FindAsync(id);
-            if (employee != null)
+            try
             {
-                _context.Employee.Remove(employee);
-                await _context.SaveChangesAsync();
+                var employee = await _context.Employee.FindAsync(id);
+                if (employee != null)
+                {
+
+                    _context.Employee.Remove(employee);
+                    await _context.SaveChangesAsync();
+                }
+            }catch (Exception ex)
+            {
+                Console.WriteLine("#############################");
+                Console.WriteLine(ex.Message);
             }
         }
 

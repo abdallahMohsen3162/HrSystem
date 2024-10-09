@@ -8,6 +8,7 @@ using BusinessLogic.Services;
 using HrSystem.Services;
 using DataLayer.Settings;
 using BusinessLayer.Seeding;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,10 +20,16 @@ builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation()
     });
 
 builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-    });
+            .AddFluentValidation(fv =>
+            {
+                fv.RegisterValidatorsFromAssemblyContaining<CreateEmployeeViewModelValidator>();
+            });
+
+//builder.Services.AddControllers()
+//    .AddJsonOptions(options =>
+//    {
+//        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+//    });
 
 // Register DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

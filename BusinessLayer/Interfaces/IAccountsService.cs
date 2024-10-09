@@ -27,5 +27,7 @@ namespace BusinessLayer.Interfaces
 
         Task<ApplicationUser> getUserData(ClaimsPrincipal User);
         Task<IdentityResult> ResetPasswordAsync(ResetUserPasswordViewModel model);
+
+        Task<string> getUserRole(string id);
     }
 }

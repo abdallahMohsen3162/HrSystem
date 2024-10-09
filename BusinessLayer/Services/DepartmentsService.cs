@@ -20,7 +20,7 @@ namespace BusinessLayer.Services
 
         public List<Department> GetDepartments()
         {
-            return _context.Departments.ToList();
+            return _context.Departments.Include(dept => dept.Employees).ToList();
         }
 
 

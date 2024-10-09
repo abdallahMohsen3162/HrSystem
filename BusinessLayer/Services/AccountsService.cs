@@ -31,12 +31,17 @@ namespace BusinessLayer.Services
         public async Task<List<UserViewModel>> GetAllUsersAsync()
         {
             var users = await _userManager.Users.ToListAsync();
+            foreach (var user in users) 
+            {
+                Console.WriteLine(user.UserName);
+            }
             return users.Select(user => new UserViewModel
             {
                 Id = user.Id,
                 UserName = user.UserName,
                 Fullname = user.Fullname,
-                Email = user.Email
+                Email = user.Email,
+                Role = getUserRole(user.Id).Result
             }).ToList();
         }
 
@@ -218,6 +223,13 @@ namespace BusinessLayer.Services
             var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
 
             return result;
+        }
+
+        public async Task<string> getUserRole(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            var role = (await _userManager.GetRolesAsync(user)).FirstOrDefault();
+            return role;
         }
 
     }
