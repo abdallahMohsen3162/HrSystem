@@ -155,12 +155,21 @@ namespace HrSystem.Controllers
         public async Task<IActionResult> Signin(LoginViewModel model)
         {
 
-            var result = await _userService.Signin(model);
-            if (result.Succeeded)
+            try
             {
-                return RedirectToAction("Index", "Home");
+                var result = await _userService.Signin(model);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             }
-            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+            }
             return View("Login", model);
         }
 

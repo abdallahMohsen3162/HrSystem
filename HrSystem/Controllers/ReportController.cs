@@ -97,6 +97,7 @@ namespace HrSystem.Controllers
 
             return View(mp);
         }
+
         [Authorize(Policy = AuthConstants.Salary.Show)]
         public async Task<IActionResult> Invoice(int id, int year, int month)
         {
@@ -184,6 +185,8 @@ namespace HrSystem.Controllers
             
             return File(pdf, "application/pdf", "Invoice.pdf");
         }
+
+
         [Authorize(Policy = AuthConstants.Salary.Show)]
         public async Task<IActionResult> PdfPage()
         {

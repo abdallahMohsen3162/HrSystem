@@ -10,6 +10,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace HrSystem.Controllers
 {
@@ -116,6 +117,7 @@ namespace HrSystem.Controllers
         }
 
         [Authorize(Policy = AuthConstants.Permissions.Edit)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Permissions.Edit)]
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {

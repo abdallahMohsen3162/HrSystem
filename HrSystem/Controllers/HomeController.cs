@@ -28,13 +28,11 @@ namespace HrSystem.Controllers
         }
 
 
-        
+
 
         //role claim
-
         public IActionResult Index()
         {
-            //emailSender.SendOutlookEmail("abdallah3162@outlook.com", "subject");
             return View();
         }
 

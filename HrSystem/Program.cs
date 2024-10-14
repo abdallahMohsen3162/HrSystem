@@ -9,6 +9,10 @@ using HrSystem.Services;
 using DataLayer.Settings;
 using BusinessLayer.Seeding;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +29,28 @@ builder.Services.AddControllers()
                 fv.RegisterValidatorsFromAssemblyContaining<CreateEmployeeViewModelValidator>();
             });
 
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["JwtConfig:Issuer"],
+        ValidAudience = builder.Configuration["JwtConfig:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtConfig:Key"]))
+    };
+});
+
 //builder.Services.AddControllers()
 //    .AddJsonOptions(options =>
 //    {
@@ -38,11 +64,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Configure Identity
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = "/Accounts/Login"; 
+    options.LoginPath = "/Accounts/Login";
 
 
-    options.AccessDeniedPath = "/Errors/NowAllowd"; 
-    
+    options.AccessDeniedPath = "/Errors/NowAllowd";
+
 });
 
 //abdallah11110000
@@ -93,7 +119,26 @@ builder.Services.AddAuthorization(options =>
     }
 });
 
-
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Description = "JWT Authorization header using the Bearer scheme."
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearerAuth" }
+            },
+            new string[] {}
+        }
+    });
+});
 
 var app = builder.Build();
 
@@ -104,7 +149,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-        c.RoutePrefix = "swagger"; 
+        c.RoutePrefix = "swagger";
     });
 }
 
@@ -123,7 +168,6 @@ app.UseRouting();
 
 // Authentication should be before Authorization
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapControllerRoute(

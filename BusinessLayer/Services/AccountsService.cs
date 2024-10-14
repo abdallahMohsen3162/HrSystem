@@ -181,6 +181,7 @@ namespace BusinessLayer.Services
         {
             try
             {
+
                 var user = await _userManager.FindByNameAsync(model.UserName);
 
                 if (user == null && model.UserName.Contains("@", StringComparison.OrdinalIgnoreCase))
@@ -190,7 +191,8 @@ namespace BusinessLayer.Services
 
                 if (user != null)
                 {
-                    return await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+                    var res = await _signInManager.PasswordSignInAsync(user.Email, model.Password, model.RememberMe, lockoutOnFailure: false); ;
+                    return res;
                 }
 
                 return SignInResult.Failed;
