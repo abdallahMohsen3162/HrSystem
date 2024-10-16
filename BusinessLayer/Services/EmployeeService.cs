@@ -132,6 +132,7 @@ namespace BusinessLayer.Services
                     await _context.SaveChangesAsync();
                 }
 
+
                 var holiday = await _context.PrivateHolidays.FirstOrDefaultAsync(h => h.EmployeeId == id);
                 if (holiday != null)
                 {
@@ -144,6 +145,7 @@ namespace BusinessLayer.Services
                 if (employee != null)
                 {
 
+                    _fileManager.DeleteFile(employee.image);
                     _context.Employee.Remove(employee);
                     await _context.SaveChangesAsync();
                 }
