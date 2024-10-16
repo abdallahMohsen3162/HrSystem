@@ -31,6 +31,7 @@ namespace HrSystem.Controllers
 
 
         //role claim
+        [Authorize]
         public IActionResult Index()
         {
             return View();
