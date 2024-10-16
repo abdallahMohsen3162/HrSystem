@@ -1,4 +1,6 @@
 ﻿using BusinessLayer.Interfaces;
+using BusinessLayer.Services;
+using DataLayer.Entities;
 using DataLayer.ViewModels;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using System;
@@ -32,6 +34,13 @@ namespace BusinessLayer.Seeding
                 {
                     Console.WriteLine("SuperAdmin role already exists.");
                 }
+                var rol = await rolesService.GetRoleByNameAsync("SuperAdmin");
+
+                for(int i = 0; i < Claims.AllClaims.Count; i++)
+                {
+                    await rolesService.AddClaimToRoleAsync(rol.Id, Claims.AllClaims[i].Type, Claims.AllClaims[i].Value);
+                }
+
 
 
                 var roles = rolesService.GetRoles();
