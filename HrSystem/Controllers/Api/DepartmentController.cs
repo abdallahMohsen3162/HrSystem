@@ -28,17 +28,12 @@ namespace HrSystem.Controllers.Api
             _mapper = mapper;
             _context = context; 
         }
-        [HttpGet]
+        [HttpGet("get-all-departments")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Department.Show)]
         public IActionResult getAllDepartments()
         {
             try
             {
-                Console.WriteLine("#############");
-                Console.WriteLine("#############");
-                Console.WriteLine("#############");
-                Console.WriteLine("#############");
-                Console.WriteLine("#############");
                 List<Department> departments = departmentsService.GetDepartments();
 
                 List<DepartmentDto> departmentDtos = _mapper.Map<List<DepartmentDto>>(departments);
@@ -52,7 +47,7 @@ namespace HrSystem.Controllers.Api
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Department.Show)]
-        [HttpGet("{id}")]
+        [HttpGet("deparment/{id}")]
         public async  Task<IActionResult> getDepartmentById(int id)
         {
             try
@@ -139,15 +134,8 @@ namespace HrSystem.Controllers.Api
 
             }catch(Exception ex)
             {
-
                 return BadRequest(ex.Message);
-
             }
-
         }
-
-
-
-
     }
 }

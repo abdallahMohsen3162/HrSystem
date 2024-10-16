@@ -36,7 +36,7 @@ namespace HrSystem.Controllers.Api
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Permissions.Show)]
-        [HttpGet]
+        [HttpGet("allRoles")]
         public IActionResult getAllRoles()
         {
             try{

@@ -118,6 +118,28 @@ namespace BusinessLayer.Services
         {
             try
             {
+                var settings = await _context.GeneralSettings.FirstOrDefaultAsync(s => s.EmployeeId == id);
+                if (settings != null)
+                {
+                    _context.GeneralSettings.Remove(settings);
+                    await _context.SaveChangesAsync();
+                }
+
+                var attendance = await _context.AttendanceTables.FirstOrDefaultAsync(a => a.EmployeeId == id);
+                if (attendance != null)
+                {
+                    _context.AttendanceTables.Remove(attendance);
+                    await _context.SaveChangesAsync();
+                }
+
+                var holiday = await _context.PrivateHolidays.FirstOrDefaultAsync(h => h.EmployeeId == id);
+                if (holiday != null)
+                {
+                    _context.PrivateHolidays.Remove(holiday);
+                    await _context.SaveChangesAsync();
+                }
+
+
                 var employee = await _context.Employee.FindAsync(id);
                 if (employee != null)
                 {
@@ -127,7 +149,6 @@ namespace BusinessLayer.Services
                 }
             }catch (Exception ex)
             {
-                Console.WriteLine("#############################");
                 Console.WriteLine(ex.Message);
             }
         }

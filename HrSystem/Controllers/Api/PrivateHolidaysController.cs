@@ -33,7 +33,7 @@ namespace HrSystem.Controllers.Api
 
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Show)]
-        [HttpGet]
+        [HttpGet("getAllPrivateHolidays")]
 
         public async Task<IActionResult> getAllPrivateHolidays()
         {

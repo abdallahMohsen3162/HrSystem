@@ -27,7 +27,7 @@ namespace HrSystem.Controllers.Api
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Show)]
-        [HttpGet]
+        [HttpGet("allHolidays")]
         public async Task<IActionResult> getAllHolidays()
         {
             try

@@ -34,7 +34,7 @@ namespace HrSystem.Controllers.Api
 
 
 
-        [HttpGet]
+        [HttpGet("allUsers")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Department.Show)]
         public async Task<IActionResult> getAllUsers()
         {

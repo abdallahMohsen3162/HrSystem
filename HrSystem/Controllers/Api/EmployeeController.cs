@@ -25,10 +25,9 @@ namespace HrSystem.Controllers.Api
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Employee.Show)]
-        [HttpGet]
+        [HttpGet("AllEmployees")]
         public IActionResult Index()
         {
-            Console.WriteLine("dddddddddddddddd");
             try
             {
                 List<Employee> emp = employeeService.GetAllEmployeesAsync().Result;
@@ -46,7 +45,7 @@ namespace HrSystem.Controllers.Api
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Employee.Show)]
-        [HttpGet("{id}")]
+        [HttpGet("employee/{id}")]
         public IActionResult Get(int id)
         {
             try
