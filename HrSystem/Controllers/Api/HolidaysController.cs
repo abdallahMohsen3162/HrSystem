@@ -47,7 +47,7 @@ namespace HrSystem.Controllers.Api
 
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Add)]
         public async Task<IActionResult> creatHoliday([FromForm] Holiday holiday)
         {
@@ -80,7 +80,7 @@ namespace HrSystem.Controllers.Api
 
         }
 
-        [HttpPost("{id}")]
+        [HttpPost("edit/{id}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Edit)]
         public async Task<IActionResult> UpdateHoliday([FromForm] Holiday holiday)
         {
@@ -115,7 +115,7 @@ namespace HrSystem.Controllers.Api
         }
 
 
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Delete)]
         public async Task<IActionResult> DeleteHoliday(int id)
         {

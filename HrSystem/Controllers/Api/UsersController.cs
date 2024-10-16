@@ -54,7 +54,7 @@ namespace HrSystem.Controllers.Api
 
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Department.Add)]
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> creatUser([FromForm] CreateUserViewModel user)
         {
             try
@@ -79,7 +79,7 @@ namespace HrSystem.Controllers.Api
 
         //delete
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Department.Delete)]
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(string id)
         {
 
@@ -110,7 +110,7 @@ namespace HrSystem.Controllers.Api
 
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Department.Edit)]
-        [HttpPatch("{id}")]
+        [HttpPatch("edit/{id}")]
         public async Task<IActionResult> Update([FromForm] EditUserDto user)
         {
             try

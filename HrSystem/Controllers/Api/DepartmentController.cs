@@ -65,7 +65,7 @@ namespace HrSystem.Controllers.Api
 
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Department.Add)]
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> Post([FromForm] Department department)
         {
             try
@@ -92,7 +92,7 @@ namespace HrSystem.Controllers.Api
 
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Department.Edit)]
-        [HttpPatch("{id}")]
+        [HttpPatch("edit/{id}")]
 
         public async Task<IActionResult> Update(int id, [FromForm] Department department)
         {
@@ -121,7 +121,7 @@ namespace HrSystem.Controllers.Api
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Department.Delete)]
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
 
         public IActionResult Delete(int id)
         {

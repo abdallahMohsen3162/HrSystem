@@ -53,7 +53,7 @@ namespace HrSystem.Controllers.Api
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Delete)]
-        [HttpDelete("{id}")]
+        [HttpDelete("deletePrivateHoliday/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
 
@@ -74,7 +74,7 @@ namespace HrSystem.Controllers.Api
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Add)]
-        [HttpPost]
+        [HttpPost("addPrivateHoliday")]
         public async Task<IActionResult> AddPrivateHoliday([FromForm] PrivateHolidayDto privateHoliday)
         {
 

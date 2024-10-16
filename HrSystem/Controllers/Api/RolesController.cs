@@ -53,7 +53,7 @@ namespace HrSystem.Controllers.Api
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Permissions.Edit)]
-        [HttpPatch("{id}")]
+        [HttpPatch("editRole/{id}")]
         public async Task<IActionResult> UpdateRole(string id, [FromForm] List<string> claims)
         {
             try
@@ -83,7 +83,7 @@ namespace HrSystem.Controllers.Api
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Permissions.Delete)]
-        [HttpDelete("{id}")]
+        [HttpDelete("deleteRole/{id}")]
         public async Task<IActionResult> DeleteRole(string id)
         {
             try

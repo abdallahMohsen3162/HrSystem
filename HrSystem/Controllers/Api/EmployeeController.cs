@@ -61,15 +61,11 @@ namespace HrSystem.Controllers.Api
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Employee.Add)]
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> Post([FromForm] CreateEmployeeViewModel employee)
         {
             try
             {
-                // Log values for debugging
-                Console.WriteLine($"Address: {employee.Address}");
-                Console.WriteLine($"Attendance Time: {employee.AttendanceTime}");
-                Console.WriteLine($"Departure Time: {employee.DepartureTime}");
                 var validate = new CreateEmployeeViewModelValidator(this._context);
                 var result = validate.Validate(employee);
                 if (!result.IsValid)
@@ -89,7 +85,7 @@ namespace HrSystem.Controllers.Api
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Employee.Delete)]
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(int id) 
         {
             try
@@ -105,7 +101,7 @@ namespace HrSystem.Controllers.Api
 
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Employee.Edit)]
-        [HttpPatch("{id}")]
+        [HttpPatch("edit/{id}")]
         //public async Task UpdateEmployeeAsync(int id, EditeEmployeeViewModel employee)
         public async Task<IActionResult> Update(int id, [FromForm] EditeEmployeeViewModel employee)
         {

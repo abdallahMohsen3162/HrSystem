@@ -67,7 +67,7 @@ namespace HrSystem.Controllers.Api
 
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Delete)]
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteAttendance(int id)
         {
             try
@@ -116,7 +116,7 @@ namespace HrSystem.Controllers.Api
 
         }
 
-        [HttpPost]
+        [HttpPost("add")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Add)]
         public async Task<IActionResult> AddAttendance([FromForm] AttendanceTableDto dto)
         {
@@ -155,7 +155,7 @@ namespace HrSystem.Controllers.Api
         }
 
 
-        [HttpPatch("{id}")]
+        [HttpPatch("edit/{id}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Edit)]
         public async Task<IActionResult> UpdateAttendance(int id, [FromForm] AttendanceTable attendance)
         {
