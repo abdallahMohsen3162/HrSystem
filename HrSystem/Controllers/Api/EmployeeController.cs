@@ -4,6 +4,8 @@ using DataLayer.Data;
 using DataLayer.dto.Employee;
 using DataLayer.Entities;
 using DataLayer.ViewModels;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HrSystem.Controllers.Api
@@ -22,9 +24,11 @@ namespace HrSystem.Controllers.Api
             _context = context;
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Employee.Show)]
         [HttpGet]
         public IActionResult Index()
         {
+            Console.WriteLine("dddddddddddddddd");
             try
             {
                 List<Employee> emp = employeeService.GetAllEmployeesAsync().Result;
@@ -41,7 +45,7 @@ namespace HrSystem.Controllers.Api
             }
         }
 
-
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Employee.Show)]
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -57,6 +61,7 @@ namespace HrSystem.Controllers.Api
             }
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Employee.Add)]
         [HttpPost]
         public async Task<IActionResult> Post([FromForm] CreateEmployeeViewModel employee)
         {
@@ -84,7 +89,7 @@ namespace HrSystem.Controllers.Api
             }
         }
 
-
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Employee.Delete)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id) 
         {
@@ -99,6 +104,8 @@ namespace HrSystem.Controllers.Api
             }
         }
 
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Employee.Edit)]
         [HttpPatch("{id}")]
         //public async Task UpdateEmployeeAsync(int id, EditeEmployeeViewModel employee)
         public async Task<IActionResult> Update(int id, [FromForm] EditeEmployeeViewModel employee)

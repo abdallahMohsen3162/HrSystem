@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DataLayer.ViewModels;
 
 using System.Web.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BusinessLayer.Services
 {
@@ -19,6 +20,8 @@ namespace BusinessLayer.Services
             _roleManager = roleManager;
         }
 
+
+      
         public List<IdentityRole> GetRoles()
         {
             var roles = _roleManager.Roles.ToList();

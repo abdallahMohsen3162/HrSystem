@@ -3,6 +3,8 @@ using DataLayer.Data;
 using DataLayer.dto.Attendence;
 using DataLayer.Entities;
 using DataLayer.Validation.Fluent_validation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HrSystem.Controllers.Api
@@ -17,6 +19,9 @@ namespace HrSystem.Controllers.Api
 
         private readonly ApplicationDbContext context;
 
+
+
+
         public PrivateHolidaysController(IPrivateHolidayService privateHolidaysService, ApplicationDbContext context)
         {
             _privateHolidaysService = privateHolidaysService;
@@ -26,6 +31,8 @@ namespace HrSystem.Controllers.Api
         }
 
 
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Show)]
         [HttpGet]
 
         public async Task<IActionResult> getAllPrivateHolidays()
@@ -45,8 +52,8 @@ namespace HrSystem.Controllers.Api
 
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Delete)]
         [HttpDelete("{id}")]
-
         public async Task<IActionResult> Delete(int id)
         {
 
@@ -65,6 +72,8 @@ namespace HrSystem.Controllers.Api
             }
 
         }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Add)]
         [HttpPost]
         public async Task<IActionResult> AddPrivateHoliday([FromForm] PrivateHolidayDto privateHoliday)
         {

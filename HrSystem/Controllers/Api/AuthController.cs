@@ -2,7 +2,9 @@
 using BusinessLayer.Services;
 using DataLayer.Entities;
 using DataLayer.ViewModels;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,14 +18,15 @@ namespace HrSystem.Controllers.Api
         private readonly IAccountsService _accountsService;
         private readonly IConfiguration _configuration;
         private readonly IRolesService _rolesService;
-        public AuthController(IAccountsService accountsService, IConfiguration configuration, IRolesService rolesService)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public AuthController(UserManager<ApplicationUser> userManager,IAccountsService accountsService, IConfiguration configuration, IRolesService rolesService)
         {
             _accountsService = accountsService;
             _configuration = configuration;
             _rolesService = rolesService;
+            _userManager = userManager;
         }
 
-        [Authorize]
         [HttpGet("get-user-profile")]
         public async Task<IActionResult> GetUserProfile()
         {
@@ -58,20 +61,21 @@ namespace HrSystem.Controllers.Api
             }
 
 
-            var result = await _accountsService.Signin(model);
+            //var result = await _accountsService.Signin(model);
             var user = await _accountsService.FindUserByName(model.UserName);
-            if (result == null || user == null)
+            if (await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                return Unauthorized(new { message = "Invalid credentials" });
-            }
-            var role = await _accountsService.getUserRole(user.Id);
-            var token = GenerateToken(model.UserName, role);
+                var role = await _accountsService.getUserRole(user.Id);
+                var token = GenerateToken(model.UserName, role);
 
-            return Ok(new
-            {
-                message = "Login successful",
-                token
-            });
+                return Ok(new
+                {
+                    message = "Login successful",
+                    token
+                });
+
+            }
+            return Unauthorized();
         }
 
         [HttpPost("logout")]

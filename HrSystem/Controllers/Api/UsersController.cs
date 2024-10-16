@@ -6,6 +6,8 @@ using DataLayer.Entities;
 using DataLayer.Validation;
 using DataLayer.Validation.Fluent_validation;
 using DataLayer.ViewModels;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -14,6 +16,8 @@ namespace HrSystem.Controllers.Api
 {
     [ApiController]
     [Route("api/[controller]")]
+
+
     public class UsersController : Controller
     {
         private readonly IAccountsService _accountsService;
@@ -27,7 +31,11 @@ namespace HrSystem.Controllers.Api
             this.context = context;
         }
 
+
+
+
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Department.Show)]
         public async Task<IActionResult> getAllUsers()
         {
             try
@@ -45,7 +53,7 @@ namespace HrSystem.Controllers.Api
 
 
 
-
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Department.Add)]
         [HttpPost]
         public async Task<IActionResult> creatUser([FromForm] CreateUserViewModel user)
         {
@@ -70,6 +78,7 @@ namespace HrSystem.Controllers.Api
 
 
         //delete
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Department.Delete)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
@@ -96,11 +105,11 @@ namespace HrSystem.Controllers.Api
 
         }
 
-            
 
 
 
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Department.Edit)]
         [HttpPatch("{id}")]
         public async Task<IActionResult> Update([FromForm] EditUserDto user)
         {
@@ -133,8 +142,6 @@ namespace HrSystem.Controllers.Api
             }
             catch (Exception ex)
             {
-
-
                 return BadRequest("An error occurred while updating the user.");
             }
         }

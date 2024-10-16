@@ -8,6 +8,8 @@ using DataLayer.Entities;
 using DataLayer.Validation;
 using DataLayer.Validation.Fluent_validation;
 using DataLayer.ViewModels;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +35,7 @@ namespace HrSystem.Controllers.Api
             _rolesService = rolesService;
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Permissions.Show)]
         [HttpGet]
         public IActionResult getAllRoles()
         {
@@ -48,6 +51,8 @@ namespace HrSystem.Controllers.Api
             }
 
         }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Permissions.Edit)]
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateRole(string id, [FromForm] List<string> claims)
         {
@@ -77,7 +82,7 @@ namespace HrSystem.Controllers.Api
             }
         }
 
-
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Permissions.Delete)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRole(string id)
         {

@@ -10,6 +10,8 @@ using DataLayer.Validation;
 using DataLayer.Validation.Fluent_validation;
 using DataLayer.ViewModels;
 using Humanizer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +33,7 @@ namespace HrSystem.Controllers.Api
             this.context = context;
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Show)]
         [HttpGet("permissions")]
         public async Task<IActionResult> GetAllPermissions()
         {
@@ -45,7 +48,7 @@ namespace HrSystem.Controllers.Api
             }
         }
 
-
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Show)]
         [HttpGet("attendances")] // Unique route for attendances
         public async Task<IActionResult> getAllAttendances(int? employeeId, DateTime? startDate, DateTime? endDate)
         {
@@ -62,8 +65,9 @@ namespace HrSystem.Controllers.Api
 
         //public async Task UpdateAttendance(AttendanceTable attendance)
 
-        [HttpDelete("{id}")]
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Delete)]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAttendance(int id)
         {
             try
@@ -78,8 +82,8 @@ namespace HrSystem.Controllers.Api
         }
 
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Add)]
         [HttpPost("addpermissions")]
-
         public async Task<IActionResult> AddPermissions([FromForm] SaveEarlyTimeViewModel permissions)
         {
             try
@@ -93,6 +97,8 @@ namespace HrSystem.Controllers.Api
             }
         }
 
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Show)]
         [HttpGet("Attendance/{id}")]
 
         public async Task<IActionResult> GetAttendanceById(int id)
@@ -111,7 +117,7 @@ namespace HrSystem.Controllers.Api
         }
 
         [HttpPost]
-
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Add)]
         public async Task<IActionResult> AddAttendance([FromForm] AttendanceTableDto dto)
         {
             try
@@ -150,7 +156,7 @@ namespace HrSystem.Controllers.Api
 
 
         [HttpPatch("{id}")]
-
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Edit)]
         public async Task<IActionResult> UpdateAttendance(int id, [FromForm] AttendanceTable attendance)
         {
             try

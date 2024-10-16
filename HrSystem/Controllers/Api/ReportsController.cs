@@ -1,5 +1,8 @@
 ﻿using BusinessLayer.Interfaces;
+using DataLayer.Entities;
 using DataLayer.ViewModels;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HrSystem.Controllers.Api
@@ -13,6 +16,9 @@ namespace HrSystem.Controllers.Api
         {
             _reportService = reportService;
         }
+
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Salary.Show)]
         [HttpGet("MultiReport/{month}/{year}/{departmentId}")]
         public async Task<IActionResult> Reports(int month = -1, int year = -1, int departmentId = -1)
         {
@@ -33,6 +39,8 @@ namespace HrSystem.Controllers.Api
                 return BadRequest(ex.Message);
             }
         }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Salary.Show)]
         [HttpGet("MonthlyReport/{month}/{year}/{employeeId}")]
         public async Task<IActionResult> EmployeeMonthlyReport(int month = -1, int year = -1, int employeeId = -1)
         {
@@ -53,7 +61,7 @@ namespace HrSystem.Controllers.Api
             }
         }
         //public async Task<IActionResult> DepartmentReports(int month, int year, int departmentId = -1)
-
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Salary.Show)]
         [HttpGet("DepartmentReports/{month}/{year}/{departmentId}")]
         public async Task<IActionResult> DepartmentReports(int month = -1, int year = -1, int departmentId = -1)
         {
