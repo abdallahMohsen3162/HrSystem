@@ -37,12 +37,12 @@ namespace HrSystem.Controllers.Api
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Permissions.Show)]
         [HttpGet("allRoles")]
-        public IActionResult getAllRoles()
+        public ActionResult<List<Rolesdto>> getAllRoles()
         {
             try{
                 List<Rolesdto> roles = _mapper.Map<List<Rolesdto>>(_rolesService.GetRoles());
-                   
-                return Ok(roles);
+
+                return roles;
             }
             catch (Exception ex)
             {

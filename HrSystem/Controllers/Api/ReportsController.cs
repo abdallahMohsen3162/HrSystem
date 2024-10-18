@@ -20,7 +20,7 @@ namespace HrSystem.Controllers.Api
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Salary.Show)]
         [HttpGet("MultiReport/{month}/{year}/{departmentId}")]
-        public async Task<IActionResult> Reports(int month = -1, int year = -1, int departmentId = -1)
+        public async Task<ActionResult<List<EmployeeMonthlyReportViewModel>>> Reports(int month = -1, int year = -1, int departmentId = -1)
         {
             try
             {
@@ -31,7 +31,7 @@ namespace HrSystem.Controllers.Api
                 }
 
                 List<EmployeeMonthlyReportViewModel> reports = await _reportService.GenerateMultiReportAsync(month, year, departmentId);
-                return Ok(reports);
+                return reports;
             }
 
             catch (Exception ex)
@@ -42,7 +42,7 @@ namespace HrSystem.Controllers.Api
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Salary.Show)]
         [HttpGet("MonthlyReport/{month}/{year}/{employeeId}")]
-        public async Task<IActionResult> EmployeeMonthlyReport(int month = -1, int year = -1, int employeeId = -1)
+        public async Task<ActionResult<EmployeeMonthlyReportViewModel>> EmployeeMonthlyReport(int month = -1, int year = -1, int employeeId = -1)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace HrSystem.Controllers.Api
                     year = DateTime.Now.Year;
                 }
                 EmployeeMonthlyReportViewModel report = await _reportService.GenerateEmployeeMonthlyReportAsync(month, year, employeeId);
-                return Ok(report);
+                return report;
             }
             catch (Exception ex)
             {
@@ -63,7 +63,7 @@ namespace HrSystem.Controllers.Api
         //public async Task<IActionResult> DepartmentReports(int month, int year, int departmentId = -1)
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Salary.Show)]
         [HttpGet("DepartmentReports/{month}/{year}/{departmentId}")]
-        public async Task<IActionResult> DepartmentReports(int month = -1, int year = -1, int departmentId = -1)
+        public async Task<ActionResult<Dictionary<string, List<EmployeeMonthlyReportViewModel>>>> DepartmentReports(int month = -1, int year = -1, int departmentId = -1)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace HrSystem.Controllers.Api
 
                 Dictionary<string, List<EmployeeMonthlyReportViewModel>> mp = _reportService.GenerateDepartmentReport(month, year, departmentId);
 
-                return Ok(mp);
+                return mp;
 
             }
 

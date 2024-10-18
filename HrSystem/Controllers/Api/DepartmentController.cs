@@ -30,7 +30,7 @@ namespace HrSystem.Controllers.Api
         }
         [HttpGet("get-all-departments")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Department.Show)]
-        public IActionResult getAllDepartments()
+        public ActionResult<List<DepartmentDto>> getAllDepartments()
         {
             try
             {
@@ -38,7 +38,7 @@ namespace HrSystem.Controllers.Api
 
                 List<DepartmentDto> departmentDtos = _mapper.Map<List<DepartmentDto>>(departments);
 
-                return Ok(departmentDtos);
+                return departmentDtos;
 
             }catch(Exception ex)
             {
@@ -48,7 +48,7 @@ namespace HrSystem.Controllers.Api
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Department.Show)]
         [HttpGet("deparment/{id}")]
-        public async  Task<IActionResult> getDepartmentById(int id)
+        public async  Task<ActionResult<DepartmentDto>> getDepartmentById(int id)
         {
             try
             {
@@ -66,7 +66,7 @@ namespace HrSystem.Controllers.Api
         }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Department.Add)]
         [HttpPost("create")]
-        public async Task<IActionResult> Post([FromForm] Department department)
+        public async Task<ActionResult<Department>> Post([FromForm] Department department)
         {
             try
             {
@@ -94,7 +94,7 @@ namespace HrSystem.Controllers.Api
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Department.Edit)]
         [HttpPatch("edit/{id}")]
 
-        public async Task<IActionResult> Update(int id, [FromForm] Department department)
+        public async Task<ActionResult<Department>> Update(int id, [FromForm] Department department)
         {
             try
             {

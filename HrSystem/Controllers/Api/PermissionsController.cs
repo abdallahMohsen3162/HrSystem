@@ -35,12 +35,12 @@ namespace HrSystem.Controllers.Api
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Show)]
         [HttpGet("permissions")]
-        public async Task<IActionResult> GetAllPermissions()
+        public async Task<ActionResult<List<AttendanceTable>>> GetAllPermissions()
         {
             try
             {
                 var permissions = await attendanceService.GetPermissions(null, null, null);
-                return Ok(permissions);
+                return permissions;
             }
             catch (Exception ex)
             {
@@ -50,12 +50,12 @@ namespace HrSystem.Controllers.Api
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Show)]
         [HttpGet("attendances")] // Unique route for attendances
-        public async Task<IActionResult> getAllAttendances(int? employeeId, DateTime? startDate, DateTime? endDate)
+        public async Task<ActionResult<List<AttendanceTable>>> getAllAttendances(int? employeeId, DateTime? startDate, DateTime? endDate)
         {
             try
             {
                 var attendances = await attendanceService.GetAttendanceRecords(employeeId, startDate, endDate);
-                return Ok(attendances);
+                return attendances;
             }
             catch (Exception ex)
             {
@@ -101,13 +101,13 @@ namespace HrSystem.Controllers.Api
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Show)]
         [HttpGet("Attendance/{id}")]
 
-        public async Task<IActionResult> GetAttendanceById(int id)
+        public async Task<ActionResult<AttendanceTable>> GetAttendanceById(int id)
         {
 
             try
             {
                 var attendance = await attendanceService.GetAttendanceById(id);
-                return Ok(attendance);
+                return attendance;
             }
             catch (Exception ex)
             {
@@ -157,12 +157,12 @@ namespace HrSystem.Controllers.Api
 
         [HttpPatch("edit/{id}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Attendance.Edit)]
-        public async Task<IActionResult> UpdateAttendance(int id, [FromForm] AttendanceTable attendance)
+        public async Task<ActionResult<AttendanceTable>> UpdateAttendance(int id, [FromForm] AttendanceTable attendance)
         {
             try
             {
                 await attendanceService.UpdateAttendance(attendance);
-                return Ok();
+                return await attendanceService.GetAttendanceById(id);
             }
             catch (Exception ex)
             {

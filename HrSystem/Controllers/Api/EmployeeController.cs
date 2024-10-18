@@ -26,17 +26,14 @@ namespace HrSystem.Controllers.Api
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Employee.Show)]
         [HttpGet("AllEmployees")]
-        public IActionResult Index()
+        public ActionResult<List<EmployeeDto>> Index()
         {
             try
             {
                 List<Employee> emp = employeeService.GetAllEmployeesAsync().Result;
                 List<EmployeeDto> employees = _mapper.Map<List<EmployeeDto>>(emp);
-                foreach (var employee in employees)
-                {
-                    Console.WriteLine(employee.EmployeeName);
-                }
-                return Ok(employees);
+
+                return employees;
             }
             catch(Exception ex)
             {
@@ -46,13 +43,13 @@ namespace HrSystem.Controllers.Api
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Employee.Show)]
         [HttpGet("employee/{id}")]
-        public IActionResult Get(int id)
+        public ActionResult<EmployeeDto> Get(int id)
         {
             try
             {
                 Employee emp = employeeService.GetEmployeeByIdAsync(id).Result;
                 EmployeeDto employee = _mapper.Map<EmployeeDto>(emp);
-                return Ok(employee);
+                return employee;
             }
             catch(Exception ex)
             {
@@ -62,7 +59,7 @@ namespace HrSystem.Controllers.Api
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Employee.Add)]
         [HttpPost("create")]
-        public async Task<IActionResult> Post([FromForm] CreateEmployeeViewModel employee)
+        public async Task<ActionResult<CreateEmployeeViewModel>> Post([FromForm] CreateEmployeeViewModel employee)
         {
             try
             {
@@ -75,7 +72,7 @@ namespace HrSystem.Controllers.Api
 
                 await employeeService.CreateEmployeeAsync(employee);
 
-                return Ok(employee);
+                return employee;
             }
             catch (Exception ex)
             {

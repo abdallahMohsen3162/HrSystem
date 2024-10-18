@@ -36,13 +36,13 @@ namespace HrSystem.Controllers.Api
 
         [HttpGet("allUsers")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Department.Show)]
-        public async Task<IActionResult> getAllUsers()
+        public async Task<ActionResult<List<UserViewModel>>> getAllUsers()
         {
             try
             {
                 List<UserViewModel> users = await _accountsService.GetAllUsersAsync();
                     
-                return Ok(users);
+                return users;
 
             }catch(Exception ex)
             {
@@ -55,7 +55,7 @@ namespace HrSystem.Controllers.Api
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Department.Add)]
         [HttpPost("create")]
-        public async Task<IActionResult> creatUser([FromForm] CreateUserViewModel user)
+        public async Task<ActionResult<CreateUserViewModel>> creatUser([FromForm] CreateUserViewModel user)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace HrSystem.Controllers.Api
                     return BadRequest(res.Errors);
                 }
                 await _accountsService.CreateUserAsync(user);
-                return Ok(user);
+                return user;
 
             }
             catch (Exception ex)
@@ -80,7 +80,7 @@ namespace HrSystem.Controllers.Api
         //delete
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Department.Delete)]
         [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<ActionResult<string>> Delete(string id)
         {
 
             try
@@ -93,7 +93,7 @@ namespace HrSystem.Controllers.Api
                     return BadRequest(result.Errors);
                 }
 
-                return Ok("User deleted successfully.");
+                return "User deleted successfully.";
 
             }
             catch (Exception ex)
@@ -111,7 +111,7 @@ namespace HrSystem.Controllers.Api
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = AuthConstants.Department.Edit)]
         [HttpPatch("edit/{id}")]
-        public async Task<IActionResult> Update([FromForm] EditUserDto user)
+        public async Task<ActionResult<EditUserDto>> Update([FromForm] EditUserDto user)
         {
             try
             {
@@ -138,7 +138,7 @@ namespace HrSystem.Controllers.Api
                     return BadRequest(result.Errors);
                 }
 
-                return Ok("User updated successfully.");
+                return user;
             }
             catch (Exception ex)
             {

@@ -28,7 +28,7 @@ namespace HrSystem.Controllers.Api
         }
 
         [HttpGet("get-user-profile")]
-        public async Task<IActionResult> GetUserProfile()
+        public async Task<ActionResult<object>> GetUserProfile()
         {
 
             var authHeader = Request.Headers["Authorization"].ToString();
@@ -41,19 +41,18 @@ namespace HrSystem.Controllers.Api
             var username = User.Identity.Name;
 
             var user = await _accountsService.FindUserByName(username);
-            Console.WriteLine(user.UserName);
-            Console.WriteLine(user.Email);
-            Console.WriteLine(user);
 
             return Ok(new
             {
                 username=user.UserName,
+                email=user.Email
+
             });
         }
 
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
+        public async Task<ActionResult<object>> Login([FromBody] LoginViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -68,21 +67,15 @@ namespace HrSystem.Controllers.Api
                 var role = await _accountsService.getUserRole(user.Id);
                 var token = GenerateToken(model.UserName, role);
 
-                return Ok(new
+                return new
                 {
                     message = "Login successful",
-                    token
-                });
+                    token,
+                    role
+                };
 
             }
             return Unauthorized();
-        }
-
-        [HttpPost("logout")]
-        public async Task<IActionResult> Logout()
-        {
-            await _accountsService.Signout();
-            return Ok(new { message = "Logout successful" });
         }
 
         private async Task<string> GenerateToken(string username, string rolename)
