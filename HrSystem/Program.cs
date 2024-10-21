@@ -119,6 +119,8 @@ builder.Services.AddAuthorization(options =>
     }
 });
 
+
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
@@ -141,6 +143,13 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<SuperAdminSeeder>();
+    await seeder.SeedAsync();
+}
 
 // Apply Seed Data in Development
 if (app.Environment.IsDevelopment())
@@ -175,3 +184,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+

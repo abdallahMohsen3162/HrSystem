@@ -21,6 +21,18 @@ namespace BusinessLayer.Seeding
 
         public async Task SeedAsync()
         {
+            Console.WriteLine("Seeding SuperAdmin...");
+            Console.WriteLine("Seeding SuperAdmin...");
+            Console.WriteLine("Seeding SuperAdmin...");
+            Console.WriteLine("Seeding SuperAdmin...");
+            Console.WriteLine("Seeding SuperAdmin...");
+            Console.WriteLine("Seeding SuperAdmin...");
+            Console.WriteLine("Seeding SuperAdmin...");
+            Console.WriteLine("Seeding SuperAdmin...");
+            Console.WriteLine("Seeding SuperAdmin...");
+            Console.WriteLine("Seeding SuperAdmin...");
+            Console.WriteLine("Seeding SuperAdmin...");
+            Console.WriteLine("Seeding SuperAdmin...");
             try
             {
 
