@@ -1,4 +1,7 @@
-﻿<div data-active-color="white" data-background-color="black" data-image="~/img/sidebar-bg/01.jpg" class="app-sidebar">
+﻿@{
+    bool isLoggedIn = (bool)ViewData["IsLoggedIn"];
+}
+<div data-active-color="white" data-background-color="black" data-image="~/img/sidebar-bg/01.jpg" class="app-sidebar">
     <div class="sidebar-header">
         <div class="logo clearfix">
             <a asp-action="Index" asp-controller="Home" class="logo-text float-left">
@@ -57,6 +60,10 @@
                     </ul>
                 </li>
 
+
+
+
+
                 <li class="nav-item">
                     <a asp-action="Index" asp-controller="Accounts"><i class="icon-users"></i><span data-i18n="" class="menu-title">Users</span></a>
                 </li>
@@ -94,6 +101,15 @@
                         </li>
                     </ul>
                 </li>
+
+                @if (!isLoggedIn)
+                {
+                    <li class="nav-item">
+                        <a asp-action="Login" asp-controller="Accounts">
+                            <i class="icon-users"></i><span data-i18n="" class="menu-title">Login</span>
+                        </a>
+                    </li>
+                }
 
 
             </ul>

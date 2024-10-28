@@ -154,7 +154,7 @@ namespace HrSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Signin(LoginViewModel model)
         {
-
+            await _userService.Signout();
             try
             {
                 var result = await _userService.Signin(model);
