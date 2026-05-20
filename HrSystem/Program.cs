@@ -73,7 +73,14 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 //abdallah11110000
 //A951M951
-
+Console.WriteLine("##########################");
+Console.WriteLine("##########################");
+Console.WriteLine("##########################");
+Console.WriteLine("##########################");
+Console.WriteLine("##########################");
+Console.WriteLine("##########################");
+Console.WriteLine("##########################");
+Console.WriteLine("##########################");
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = false;
