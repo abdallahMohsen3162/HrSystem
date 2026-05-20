@@ -1,4 +1,4 @@
-﻿using DataLayer.Entities;
+using DataLayer.Entities;
 using DataLayer.ViewModels;
 using DataLayer.Data;
 using Microsoft.EntityFrameworkCore;
@@ -147,8 +147,8 @@ namespace HrSystem.Services
                     };
                 }
 
-                decimal EmployeebonusHour = employee.GeneralSettings.bonusPerHoure;
-                decimal EmployeediscountHour = employee.GeneralSettings.rivalPerHour;
+                decimal EmployeebonusHour = employee.GeneralSettings?.bonusPerHoure ?? 0m;
+                decimal EmployeediscountHour = employee.GeneralSettings?.rivalPerHour ?? 0m;
 
                 decimal HourPrice = (decimal)(employee.Salary / 30) / (decimal)(employee.DepartureTime - employee.AttendanceTime).TotalHours;
                 int daysInMonth = (endDate - startDate).Days;
